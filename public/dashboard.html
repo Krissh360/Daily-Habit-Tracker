@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Daily Habit Tracker</h1>
+    
+    <div class="input-section">
+        <input id="habitTitle" placeholder="Enter a new habit..." class="habit-input">
+        <button onclick="addHabit()" class="add-btn">+ Add Habit</button>
+    </div>
+
+    <div id="habitList" class="habit-list"></div>
+    
+    <button onclick="logout()" class="logout-btn">Logout</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
