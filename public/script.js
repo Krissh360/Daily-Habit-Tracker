@@ -15,7 +15,18 @@ function register() {
         })
     })
     .then(res => res.json())
-    .then(data => alert(data.message));
+    .then(data => {
+        console.log("Register response:", data);
+        alert(data.message);
+        
+        if (data.message === "Registered successfully") {
+            window.location.href = "login.html";
+        }
+    })
+    .catch(err => {
+        console.error("Register error:", err);
+        alert("An error occurred: " + err.message);
+    });
 }
 
 function login() {
@@ -32,16 +43,25 @@ function login() {
     })
     .then(res => res.json())
     .then(data => {
-        localStorage.setItem("token", data.token);
-        window.location = "dashboard.html";
+        console.log("Login response:", data);
+        
+        if (data.token) {
+            localStorage.setItem("token", data.token);
+            window.location.href = "dashboard.html";
+        } else {
+            alert(data.message || "Login failed");
+        }
+    })
+    .catch(err => {
+        console.error("Login error:", err);
+        alert("An error occurred: " + err.message);
     });
 }
 
-// Dashboard functionality
 function loadHabits() {
     const token = localStorage.getItem("token");
     if (!token) {
-        window.location = "index.html";
+        window.location = "register.html";
         return;
     }
 
@@ -116,7 +136,6 @@ function logout() {
     window.location = "index.html";
 }
 
-// Load habits only when on the dashboard page
 function initPage() {
     const path = window.location.pathname || '';
     if (path.endsWith('dashboard.html') || path.endsWith('/dashboard.html')) {
