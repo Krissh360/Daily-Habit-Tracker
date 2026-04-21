@@ -1,34 +1,42 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../services/api";
+import { loginUser, registerUser } from "../services/api";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
   const [isLogin, setIsLogin] = useState(true);
 
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleAuth = async () => {
   try {
     setError("");
 
-    const data = await loginUser({ email, password });
+    let data;
 
-    // Save token
-    localStorage.setItem("token", data.token);
+    if (isLogin) {
+      data = await loginUser({ email, password });
 
-    // Save user info
-    const username = email.split("@")[0];
+      localStorage.setItem("token", data.token);
 
-    localStorage.setItem("user", JSON.stringify({
-      name: username.charAt(0).toUpperCase() + username.slice(1),
-      email: email
-    }));
+      const username = email.split("@")[0];
 
-    // Redirect
-    navigate("/dashboard");
+      localStorage.setItem("user", JSON.stringify({
+        name: username.charAt(0).toUpperCase() + username.slice(1),
+        email: email
+      }));
+
+      navigate("/dashboard");
+
+    } else {
+      await registerUser({ email, password });
+
+      alert("Registered successfully! Please login.");
+      setIsLogin(true);
+    }
 
   } catch (err) {
     setError(err.message);
@@ -64,11 +72,22 @@ export default function Auth() {
         />
 
         <button
-          onClick={handleLogin}
+          onClick={handleAuth}
           className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
         >
-          Login
+          {isLogin ? "Login" : "Register"}
         </button>
+
+        <p className="text-sm text-gray-500 mt-4">
+  {isLogin ? "Don't have an account?" : "Already have an account?"}
+  <button
+    onClick={() => setIsLogin(!isLogin)}
+    className="text-blue-600 ml-2"
+  >
+    {isLogin ? "Register" : "Login"}
+  </button>
+</p>
+
       </div>
     </div>
   );
