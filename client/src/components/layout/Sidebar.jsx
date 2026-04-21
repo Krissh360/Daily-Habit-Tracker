@@ -27,7 +27,7 @@ export default function Sidebar() {
             to={item.path}
             className={`block px-4 py-2 rounded-md transition ${
               location.pathname === item.path
-                ? "bg-blue-600"
+                ? "bg-rgba(213, 201, 163, 0.08) !important text-#D4AF37"
                 : "hover:bg-gray-700"
             }`}
           >

@@ -1,6 +1,6 @@
 /* ===== TERMINAL BASE ===== */
 .terminal-theme {
-    background-color: #110d02 !important;
+    background-color: #070601 !important;
     color: #D4AF37 !important;
     font-family: "Courier New", monospace;
 }
@@ -81,3 +81,68 @@
     text-shadow: 0 0 5px rgba(212, 175, 55, 0.7);
 }
 
+/* ===== SIDEBAR BASE ===== */
+.terminal-theme aside {
+    background-color: #110d02 !important;
+    border-right: 1px solid rgba(212, 175, 55, 0.7);
+}
+
+/* Sidebar text */
+.terminal-theme aside * {
+    color: #D4AF37 !important;
+}
+
+/* ===== SIDEBAR ITEMS ===== */
+.terminal-theme aside a {
+    background: transparent !important;
+    border: none !important;
+}
+
+/* Hover effect */
+.terminal-theme aside a:hover {
+    background-color: rgba(212, 175, 55, 0.1) !important;
+    border-left: 2px solid #D4AF37;
+}
+
+/* ===== ACTIVE ITEM (Dashboard etc.) ===== */
+.terminal-theme .bg-blue-500 {
+    background-color: rgba(212, 175, 55, 0.15) !important;
+    border-left: 3px solid #D4AF37 !important;
+    box-shadow: none !important;
+}
+
+/* Remove default white text */
+.terminal-theme .text-white {
+    color: #D4AF37 !important;
+}
+
+.terminal-theme aside h1,
+.terminal-theme aside h2 {
+    text-shadow: 0 0 6px rgba(212, 175, 55, 0.8);
+}
+
+/* Add > before menu items */
+.terminal-theme aside a::before {
+    content: "> ";
+    opacity: 0.7;
+}
+
+/* FORCE sidebar background override */
+.terminal-theme aside,
+.terminal-theme .bg-gray-900,
+.terminal-theme .bg-slate-900 {
+    background-color: #070601 !important;
+}
+
+/* Remove inner dark layers */
+.terminal-theme aside div {
+    background-color: transparent !important;
+}
+
+/* ===== FORCE ALL BORDERS TO THEME COLOR ===== */
+.terminal-theme .border {
+    border-color: #D4AF37 !important;
+}
+.terminal-theme * {
+    border-color: #D4AF37 !important;
+}
