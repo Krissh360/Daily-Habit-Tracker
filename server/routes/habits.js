@@ -84,7 +84,7 @@ router.post("/", verifyToken, async (req, res) => {
     });
 
     await habit.save();
-    res.json({ message: "Habit added" });
+    res.json(habit);
 
   } catch (err) {
     res.status(500).json(err.message);

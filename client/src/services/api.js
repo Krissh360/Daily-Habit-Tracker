@@ -17,3 +17,42 @@ export async function loginUser(data) {
 
   return result;
 }
+
+export async function getHabits() {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch("http://localhost:5000/api/habits", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to fetch habits");
+  }
+
+  return data;
+}
+
+export async function addHabit(name) {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch("http://localhost:5000/api/habits", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ title: name }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to add habit");
+  }
+
+  return data;
+}
