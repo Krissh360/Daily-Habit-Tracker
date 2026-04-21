@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import './App.css';
 
 const HABITS_KEY = 'daily-habit-tracker-habits';
 const COMPLETIONS_KEY = 'daily-habit-tracker-completions';
