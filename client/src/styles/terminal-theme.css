@@ -1,0 +1,83 @@
+/* ===== TERMINAL BASE ===== */
+.terminal-theme {
+    background-color: #0e131d !important;
+    color: #00d4ff !important;
+    font-family: "Courier New", monospace;
+}
+
+
+/* Add glow ONLY to headings */
+.terminal-theme h1,
+.terminal-theme h2,
+.terminal-theme h3 {
+    text-shadow: 0 0 6px rgba(0, 191, 255, 0.9);
+}
+
+/* ===== REMOVE ROUNDED MODERN UI ===== */
+.terminal-theme * {
+    border-radius: 0 !important;
+}
+
+/* ===== PANELS / CARDS ===== */
+.terminal-theme .bg-white,
+.terminal-theme .bg-gray-100,
+.terminal-theme .bg-gray-50 {
+    background-color: #070b14 !important;
+    border: 1px solid #00d4ff;
+    box-shadow: none;
+    border: 1px solid rgba(0, 191, 255, 0.6);
+}
+
+/* ===== TEXT COLORS (override Tailwind) ===== */
+.terminal-theme .text-gray-900,
+.terminal-theme .text-gray-800,
+.terminal-theme .text-gray-700,
+.terminal-theme .text-gray-600 {
+    color: #00d4ff !important;
+}
+
+/* ===== BUTTONS ===== */
+.terminal-theme button {
+    background: transparent !important;
+    color: #00d4ff !important;
+    border: 1px solid #00d4ff !important;
+    font-family: inherit;
+}
+
+.terminal-theme button:hover {
+    background-color: #00bfff !important;
+    color: #04060a !important;
+    box-shadow: 0 0 10px #00bfff;
+}
+
+/* ===== INPUT FIELDS ===== */
+.terminal-theme input {
+    background-color: #04060a !important;
+    border: 1px solid #00d4ff !important;
+    color: #00d4ff !important;
+}
+
+/* Progress bar */
+.terminal-theme .bg-green-500 {
+    background-color: #00d4ff !important;
+}
+
+/* Habit cards */
+.terminal-theme .bg-green-100 {
+    background-color: #07121f !important;
+    border: 1px solid #00d4ff;
+}
+
+/* Headings only */
+.terminal-theme h1,
+.terminal-theme h2 {
+    color: #00d4ff;
+    text-shadow: 0 0 6px rgba(0, 212, 255, 0.8);
+}
+
+/* Important numbers (like progress) */
+.terminal-theme strong,
+.terminal-theme .highlight {
+    text-shadow: 0 0 5px rgba(0, 212, 255, 0.7);
+}
+
