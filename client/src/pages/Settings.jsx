@@ -1,9 +1,17 @@
+import { useNavigate } from "react-router-dom";
+
 export default function Settings() {
 
+    const navigate = useNavigate();
+
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
-  };
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+
+  navigate("/"); // or "/login" depending on your route
+};
+
+
 
   return (
     <div className="space-y-6">

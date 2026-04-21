@@ -47,9 +47,14 @@ export default function Auth() {
     <div className="h-screen flex justify-center items-center bg-gray-100">
       <div className="bg-white p-8 rounded-xl shadow-md w-96">
 
-        <h1 className="text-2xl font-bold mb-4 text-center">
-          Login 🔐
-        </h1>
+        <h2 className="text-2xl font-bold text-gray-800, text-center mb-2">
+    {isLogin ? "Login" : "Register"}</h2>
+
+    <p className="text-gray-500, text-center mb-6">
+    {isLogin
+        ? "Welcome back! Please login to continue."
+        : "Create an account to get started."}
+    </p>
 
         {error && (
           <p className="text-red-500 text-sm mb-3">{error}</p>
