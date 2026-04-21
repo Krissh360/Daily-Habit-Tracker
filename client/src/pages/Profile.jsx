@@ -41,7 +41,7 @@ export default function Profile() {
       {/* 🔹 Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-800">
-          My Profile 👤
+          My Profile 
         </h1>
         <p className="text-gray-500">
           Your personal habit journey
@@ -54,7 +54,7 @@ export default function Profile() {
           User Overview
         </h2>
         <p className="text-gray-600">
-          Consistency builder 🚀
+          Consistency builder 
         </p>
         <p className="text-gray-500 text-sm mt-1">
           Tracking habits and improving daily
@@ -85,7 +85,7 @@ export default function Profile() {
             {mostCompleted.title || "None"}
           </p>
           <p className="text-gray-500 text-sm">
-            ✅ {mostCompleted.totalCompleted || 0} completions
+            {mostCompleted.totalCompleted || 0} completions
           </p>
         </div>
 
@@ -94,7 +94,7 @@ export default function Profile() {
       {/* 🔹 Motivation */}
       <div className="bg-white p-6 rounded-xl shadow">
         <h2 className="text-lg font-semibold mb-2">
-          Keep Going 💪
+          Keep Going!
         </h2>
         <p className="text-gray-600">
           Small habits build big results. Stay consistent and trust the process.
