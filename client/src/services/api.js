@@ -56,3 +56,68 @@ export async function addHabit(name) {
 
   return data;
 }
+
+export async function completeHabit(id) {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `http://localhost:5000/api/habits/complete/${id}`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to complete habit");
+  }
+
+  return data;
+}
+
+export async function deleteHabit(id) {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `http://localhost:5000/api/habits/${id}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to delete habit");
+  }
+
+  return data;
+}
+
+export async function getAnalytics() {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    "http://localhost:5000/api/habits/analytics",
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to fetch analytics");
+  }
+
+  return data;
+}

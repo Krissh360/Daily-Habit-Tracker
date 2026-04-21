@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { getHabits, addHabit } from "../services/api";
+import { completeHabit } from "../services/api";
+import { deleteHabit } from "../services/api";
 
 export default function Dashboard() {
   const [habits, setHabits] = useState([]);
+  const today = new Date().toDateString();
   const [loading, setLoading] = useState(true);
   const [newHabit, setNewHabit] = useState(""); 
   useEffect(() => {
@@ -35,6 +38,29 @@ export default function Dashboard() {
   }
 };
 
+const handleComplete = async (id) => {
+  try {
+    await completeHabit(id);
+
+    // refresh habits
+    const updated = await getHabits();
+    setHabits(updated);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const handleDelete = async (id) => {
+  try {
+    await deleteHabit(id);
+
+    const updated = await getHabits();
+    setHabits(updated);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
   const totalHabits = habits.length;
 
   return (
@@ -62,17 +88,23 @@ export default function Dashboard() {
 
         <div className="bg-white p-4 rounded-xl shadow">
           <h2 className="text-gray-500 text-sm">Completed Today</h2>
-          <p className="text-2xl font-bold">0</p>
+          <p className="text-2xl font-bold">
+            {loading ? "..." : habits.filter(h => h.completedDates.includes(today)).length}
+          </p>
         </div>
 
         <div className="bg-white p-4 rounded-xl shadow">
           <h2 className="text-gray-500 text-sm">Current Streak</h2>
-          <p className="text-2xl font-bold">0 days</p>
+          <p className="text-2xl font-bold">
+            {loading ? "..." : Math.max(...habits.map(h => h.currentStreak), 0)} days
+          </p>
         </div>
 
         <div className="bg-white p-4 rounded-xl shadow">
           <h2 className="text-gray-500 text-sm">Completion Rate</h2>
-          <p className="text-2xl font-bold">0%</p>
+          <p className="text-2xl font-bold">
+            {loading ? "..." : totalHabits > 0 ? Math.round((habits.filter(h => h.completedDates.includes(today)).length / totalHabits) * 100) : 0}%
+          </p>
         </div>
 
       </div>
@@ -113,15 +145,47 @@ export default function Dashboard() {
           <p className="text-gray-500">No habits added yet.</p>
         ) : (
           <ul className="space-y-2">
-            {habits.map((habit) => (
-              <li
-                key={habit._id}
-                className="p-3 border rounded-md"
-              >
-                {habit.title}
-              </li>
-            ))}
-          </ul>
+  {habits.map((habit) => (
+    <li
+  key={habit._id}
+  className={`p-3 border rounded-md flex justify-between items-center ${
+    habit.completedDates?.includes(today)
+      ? "bg-green-100"
+      : ""
+  }`}
+>
+  {/* LEFT SIDE */}
+  <span>
+    {habit.title}
+    <span className="text-sm text-gray-500 ml-2">
+      🔥 {habit.currentStreak}
+    </span>
+  </span>
+
+  {/* RIGHT SIDE BUTTONS */}
+  <div className="flex gap-2">
+    <button
+      onClick={() => handleComplete(habit._id)}
+      disabled={habit.completedDates?.includes(today)}
+      className={`px-3 py-1 rounded-md text-white ${
+        habit.completedDates?.includes(today)
+          ? "bg-gray-400 cursor-not-allowed"
+          : "bg-green-600 hover:bg-green-700"
+      }`}
+    >
+      {habit.completedDates?.includes(today) ? "Done" : "Complete"}
+    </button>
+
+    <button
+      onClick={() => handleDelete(habit._id)}
+      className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600"
+    >
+      Delete
+    </button>
+  </div>
+</li>
+  ))}
+</ul>
         )}
       </div>
 
