@@ -53,7 +53,7 @@ export default function Analytics() {
         data.totalCompletions,
         data.averageStreak
       ],
-      backgroundColor: ["#3b82f6", "#10b981", "#f59e0b"],
+      backgroundColor: ["#6d9ff0", "#46dfac", "#ebb65c"],
     },
   ],
 };
