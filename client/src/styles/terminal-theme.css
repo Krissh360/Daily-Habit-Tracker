@@ -1,7 +1,7 @@
 /* ===== TERMINAL BASE ===== */
 .terminal-theme {
-    background-color: #0e131d !important;
-    color: #00d4ff !important;
+    background-color: #110d02 !important;
+    color: #D4AF37 !important;
     font-family: "Courier New", monospace;
 }
 
@@ -10,7 +10,7 @@
 .terminal-theme h1,
 .terminal-theme h2,
 .terminal-theme h3 {
-    text-shadow: 0 0 6px rgba(0, 191, 255, 0.9);
+    text-shadow: 0 0 6px rgba(212, 175, 55, 0.7);
 }
 
 /* ===== REMOVE ROUNDED MODERN UI ===== */
@@ -22,10 +22,10 @@
 .terminal-theme .bg-white,
 .terminal-theme .bg-gray-100,
 .terminal-theme .bg-gray-50 {
-    background-color: #070b14 !important;
-    border: 1px solid #00d4ff;
+    background-color: #110d02 !important;
+    border: 1px solid #D4AF37;
     box-shadow: none;
-    border: 1px solid rgba(0, 191, 255, 0.6);
+    border: 1px solid rgba(212, 175, 55, 0.6);
 }
 
 /* ===== TEXT COLORS (override Tailwind) ===== */
@@ -33,51 +33,51 @@
 .terminal-theme .text-gray-800,
 .terminal-theme .text-gray-700,
 .terminal-theme .text-gray-600 {
-    color: #00d4ff !important;
+    color: #D4AF37 !important;
 }
 
 /* ===== BUTTONS ===== */
 .terminal-theme button {
     background: transparent !important;
-    color: #00d4ff !important;
-    border: 1px solid #00d4ff !important;
+    color: #D4AF37 !important;
+    border: 1px solid #D4AF37 !important;
     font-family: inherit;
 }
 
 .terminal-theme button:hover {
-    background-color: #00bfff !important;
+    background-color: #D4AF37 !important;
     color: #04060a !important;
-    box-shadow: 0 0 10px #00bfff;
+    box-shadow: 0 0 10px #D4AF37;
 }
 
 /* ===== INPUT FIELDS ===== */
 .terminal-theme input {
     background-color: #04060a !important;
-    border: 1px solid #00d4ff !important;
-    color: #00d4ff !important;
+    border: 1px solid #D4AF37 !important;
+    color: #D4AF37 !important;
 }
 
 /* Progress bar */
 .terminal-theme .bg-green-500 {
-    background-color: #00d4ff !important;
+    background-color: #D4AF37 !important;
 }
 
 /* Habit cards */
 .terminal-theme .bg-green-100 {
     background-color: #07121f !important;
-    border: 1px solid #00d4ff;
+    border: 1px solid #D4AF37;
 }
 
 /* Headings only */
 .terminal-theme h1,
 .terminal-theme h2 {
-    color: #00d4ff;
-    text-shadow: 0 0 6px rgba(0, 212, 255, 0.8);
+    color: #D4AF37;
+    text-shadow: 0 0 6px rgba(212, 175, 55, 0.8);
 }
 
 /* Important numbers (like progress) */
 .terminal-theme strong,
 .terminal-theme .highlight {
-    text-shadow: 0 0 5px rgba(0, 212, 255, 0.7);
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.7);
 }
 
