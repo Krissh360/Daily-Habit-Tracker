@@ -1,6 +1,25 @@
 import { useEffect, useState } from "react";
 import { getAnalytics } from "../services/api";
 
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend
+} from "chart.js";
+
+import { Bar } from "react-chartjs-2";
+
+ChartJS.register(
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend
+);
+
 export default function Analytics() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -24,11 +43,35 @@ export default function Analytics() {
     return <p>Loading analytics...</p>;
   }
 
+  const chartData = {
+  labels: ["Habits", "Completions", "Avg Streak"],
+  datasets: [
+    {
+      label: "Your Stats",
+      data: [
+        data.totalHabits,
+        data.totalCompletions,
+        data.averageStreak
+      ],
+      backgroundColor: ["#3b82f6", "#10b981", "#f59e0b"],
+    },
+  ],
+};
+
+const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      display: false,
+    },
+  },
+};
+
   return (
     <div className="space-y-6">
       
       <h1 className="text-2xl font-bold text-gray-800">
-        Analytics 📊
+        Analytics 
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -56,6 +99,16 @@ export default function Analytics() {
         </div>
 
       </div>
+
+      <div className="bg-white p-6 rounded-xl shadow">
+  <h2 className="text-lg font-semibold mb-4">
+    Performance Overview
+  </h2>
+
+  <div className="h-64">
+  <Bar data={chartData} options={options} />
+</div>
+</div>
 
     </div>
   );
