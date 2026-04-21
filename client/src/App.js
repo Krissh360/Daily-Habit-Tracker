@@ -9,6 +9,7 @@ import Auth from "./pages/Auth";
 
 import Sidebar from "./components/layout/Sidebar";
 import Navbar from "./components/layout/Navbar";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 // Layout wrapper for authenticated pages
 function AppLayout({ children }) {
@@ -35,45 +36,55 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <AppLayout>
-              <Dashboard />
-            </AppLayout>
+            <ProtectedRoute>
+              <AppLayout>
+                <Dashboard />
+              </AppLayout>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/habits"
           element={
-            <AppLayout>
-              <Habits />
-            </AppLayout>
+            <ProtectedRoute>
+              <AppLayout>
+                <Habits />
+              </AppLayout>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/analytics"
           element={
-            <AppLayout>
-              <Analytics />
-            </AppLayout>
+            <ProtectedRoute>
+              <AppLayout>
+                <Analytics />
+              </AppLayout>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/profile"
           element={
-            <AppLayout>
-              <Profile />
-            </AppLayout>
+            <ProtectedRoute>
+              <AppLayout>
+                <Profile />
+              </AppLayout>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/settings"
           element={
-            <AppLayout>
-              <Settings />
-            </AppLayout>
+            <ProtectedRoute>
+              <AppLayout>
+                <Settings />
+              </AppLayout>
+            </ProtectedRoute>
           }
         />
 
