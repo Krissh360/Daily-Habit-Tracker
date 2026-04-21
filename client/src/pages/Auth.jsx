@@ -44,13 +44,13 @@ export default function Auth() {
 };
 
   return (
-    <div className="h-screen flex justify-center items-center bg-gray-100">
-      <div className="bg-white p-8 rounded-xl shadow-md w-96">
+    <div className="terminal-theme min-h-screen flex justify-center items-center">
+      <div className="bg-white p-8 w-96 border">
 
-        <h2 className="text-2xl font-bold text-gray-800, text-center mb-2">
+        <h2 className="text-2xl font-bold text-gray-800 text-center mb-2">
     {isLogin ? "Login" : "Register"}</h2>
 
-    <p className="text-gray-500, text-center mb-6">
+    <p className="text-gray-500 text-center mb-6">
     {isLogin
         ? "Welcome back! Please login to continue."
         : "Create an account to get started."}
@@ -78,7 +78,7 @@ export default function Auth() {
 
         <button
           onClick={handleAuth}
-          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
+          className="w-full py-2 border"
         >
           {isLogin ? "Login" : "Register"}
         </button>
@@ -87,7 +87,7 @@ export default function Auth() {
   {isLogin ? "Don't have an account?" : "Already have an account?"}
   <button
     onClick={() => setIsLogin(!isLogin)}
-    className="text-blue-600 ml-2"
+    className="ml-2 underline"
   >
     {isLogin ? "Register" : "Login"}
   </button>
