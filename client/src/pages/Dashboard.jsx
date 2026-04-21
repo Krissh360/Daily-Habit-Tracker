@@ -115,7 +115,7 @@ export default function Dashboard() {
         <div className="flex gap-2">
           <input
             type="text"
-            placeholder="Enter habit..."
+        placeholder="Enter habit..."
             className="flex-1 p-2 border rounded-md"
             value={newHabit}
             onChange={(e) => setNewHabit(e.target.value)}
@@ -123,7 +123,7 @@ export default function Dashboard() {
 
           <button
             onClick={handleAddHabit}
-            className="bg-blue-600 text-white px-4 rounded-md hover:bg-blue-700"
+            className="bg-#D4AF37 text-white px-4 rounded-md hover:bg-blue-700"
           >
             Add
           </button>
@@ -145,7 +145,7 @@ export default function Dashboard() {
                 key={habit._id}
                 className={`p-3 border rounded-md flex justify-between items-center ${
                   habit.completedDates?.includes(today)
-                    ? "bg-green-100"
+                    ? "bg-#D4AF37"
                     : ""
                 }`}
               >
