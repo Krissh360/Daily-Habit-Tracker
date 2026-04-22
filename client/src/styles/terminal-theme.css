@@ -104,11 +104,18 @@
     border-left: 2px solid #D4AF37;
 }
 
-/* ===== ACTIVE ITEM (Dashboard etc.) ===== */
+
+
+/* ===== ACTIVE NAV ITEM ===== */
 .terminal-theme .bg-blue-500 {
-    background-color: rgba(212, 175, 55, 0.15) !important;
-    border-left: 3px solid #D4AF37 !important;
-    box-shadow: none !important;
+    background-color: rgba(212, 175, 55, 0.2) !important;
+    color: #D4AF37 !important;
+    border-left: 4px solid #D4AF37 !important;
+    font-weight: 600;
+}
+
+.terminal-theme .bg-blue-500 {
+    text-shadow: 0 0 6px rgba(212, 175, 55, 0.8);
 }
 
 /* Remove default white text */
