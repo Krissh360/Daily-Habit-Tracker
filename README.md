@@ -1,134 +1,496 @@
-# Daily-Habit-Tracker
+# Daily Habit Tracker
 
-Project Title:
-Daily Habit Tracker with Gamification 
+### Build better habits. Track daily progress. Analyze your consistency.
 
+> A full-stack web application to help users build consistency, track daily habits, and gain actionable insights into their long-term productivity.
 
-Problem Statement:
+---
 
-In today’s fast-paced digital lifestyle, many individuals struggle to build and maintain positive daily habits such as regular exercise, studying, meditation, or healthy routines. Existing habit-tracking methods are often monotonous and fail to keep users motivated over long periods. 
-There is a need for an interactive and engaging system that not only tracks daily habits but also motivates users through gamification elements such as points, streaks, levels, and rewards. A centralized habit tracker with game-like feedback can significantly improve consistency, self-discipline, and long-term habit formation. 
+## Table of Contents
 
+1. [Project Overview](#project-overview)
+2. [Features](#features)
+3. [Tech Stack](#tech-stack)
+4. [System Architecture](#system-architecture)
+5. [Execution Flow](#execution-flow)
+6. [Architecture Flowchart](#architecture-flowchart)
+7. [Project Structure](#project-structure)
+8. [Prerequisites](#prerequisites)
+9. [Installation Guide](#installation-guide)
+10. [Usage Guide](#usage-guide)
+11. [API Reference](#api-reference)
+12. [Roadmap](#roadmap)
+13. [Contributing](#contributing)
+14. [License](#license)
+15. [Author](#author)
 
-Module Breakdown:
+---
 
-1. User Authentication Module 
+## Project Overview
 
-Handles user registration and login, ensuring secure access to personal habit data. 
+**Daily Habit Tracker** is a full-stack web application designed to help individuals build consistency, track daily habits, and improve long-term productivity through structured progress monitoring and analytics.
 
-2. Habit Management Module 
+The application provides a clean, intuitive interface that allows users to register, log in, manage their personal habits, mark daily completions, and visualize their performance over time — all backed by a robust RESTful API and a scalable MVC-based backend architecture connected to MongoDB Atlas.
 
-Allows users to create, update, delete, and manage daily habits with customizable frequency and goals. 
+Whether you're trying to maintain a morning routine, hit daily fitness goals, or stay consistent with learning, Daily Habit Tracker gives you the structure and insight to stay on track.
 
-3. Daily Tracking Module 
+---
 
-Enables users to mark habits as completed or missed on a daily basis. 
+## Features
 
-4. Gamification Module 
+### User Management
+- Secure user registration and login
+- JWT-based authentication
+- Individual profile management per user
 
-Implements points, streaks, levels, badges, and rewards to motivate users and encourage consistency. 
+### Habit Management
+- Create, update, and delete personal habits
+- Mark habits as completed on a daily basis
+- Maintain full historical completion records
 
-5. Progress Analytics Module 
+### Analytics Dashboard
+- Visual representation of habit completion rates
+- Daily and weekly performance tracking
+- Progress indicators to highlight streaks and gaps
 
-Displays habit completion statistics, streak history, and progress summaries using visual indicators. 
+### System Design
+- RESTful API architecture
+- MVC pattern with strict separation of concerns
+- Cloud-hosted MongoDB Atlas integration
+- Middleware-based authentication and request validation
 
-6. Database Management Module 
+---
 
-Stores user data, habits, completion records, and gamification metrics in a structured manner. 
+## Tech Stack
 
- 
+| Layer | Technology | Purpose |
+|---|---|---|
+| **Frontend** | HTML5, CSS3, JavaScript (ES6+) | User interface and client-side logic |
+| **Backend** | Node.js, Express.js | Server, routing, and API handling |
+| **Database** | MongoDB Atlas + Mongoose | Cloud data storage and schema modeling |
+| **Authentication** | JSON Web Tokens (JWT) | Secure user session management |
+| **Dev Tools** | Git, GitHub, VS Code, Postman | Version control, development, API testing |
 
-Requirements:
+---
 
-Functional Requirements 
+## System Architecture
 
-    User registration and login system 
-    Create, edit, and delete daily habits 
-    Daily habit completion tracking 
-    Automatic streak calculation 
-    Points and rewards system 
-    Level progression based on consistency 
-    Progress dashboard for users 
-    Secure storage of user and habit data 
+The application is built on a **layered MVC architecture** with a clear, strict separation between the presentation layer, business logic, and data access. This design ensures modularity, testability, and long-term scalability.
 
-Non-Functional Requirements 
+```
+┌──────────────────────────────────────────┐
+│             PRESENTATION LAYER           │
+│         HTML5 · CSS3 · JavaScript        │
+│   (User-facing Interface & DOM Logic)    │
+└────────────────────┬─────────────────────┘
+                     │  HTTP Requests / Responses
+┌────────────────────▼─────────────────────┐
+│               API LAYER                  │
+│          Express.js Routes               │
+│    (Request Routing & Middleware Auth)   │
+└────────────────────┬─────────────────────┘
+                     │
+┌────────────────────▼─────────────────────┐
+│           BUSINESS LOGIC LAYER           │
+│              Controllers                 │
+│  (Request Handling, Validation, Logic)   │
+└────────────────────┬─────────────────────┘
+                     │
+┌────────────────────▼─────────────────────┐
+│           DATA ACCESS LAYER              │
+│          Mongoose Models                 │
+│      (Schema Definition & Queries)       │
+└────────────────────┬─────────────────────┘
+                     │
+┌────────────────────▼─────────────────────┐
+│            DATABASE LAYER                │
+│          MongoDB Atlas (Cloud)           │
+│     (Persistent Cloud Data Storage)      │
+└──────────────────────────────────────────┘
+```
 
-    Simple and intuitive user interface 
-    Fast response time 
-    Secure authentication and data handling 
-    Scalable system design 
-    Cross-platform browser compatibility 
+---
 
- 
+## Execution Flow
 
-Design:
+The following describes the complete lifecycle of a request through the application:
 
-High Level Design 
+```
+  User Interaction
+       │
+       ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │  1. User performs an action on the frontend (e.g., adds a   │
+  │     habit, marks it complete, views analytics).             │
+  └──────────────────────────┬──────────────────────────────────┘
+                             │
+                             ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │  2. Frontend sends an HTTP Request to the Express API.      │
+  │     (GET / POST / PUT / DELETE)                             │
+  └──────────────────────────┬──────────────────────────────────┘
+                             │
+                             ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │  3. Middleware runs first.                                  │
+  │     — JWT token is verified for protected routes.          │
+  │     — Request body is validated.                           │
+  └──────────────────────────┬──────────────────────────────────┘
+                             │
+                             ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │  4. Express Router matches the route and forwards           │
+  │     the request to the appropriate Controller.             │
+  └──────────────────────────┬──────────────────────────────────┘
+                             │
+                             ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │  5. Controller processes the business logic:                │
+  │     — Reads or mutates data as required.                   │
+  │     — Calls the relevant Mongoose Model methods.           │
+  └──────────────────────────┬──────────────────────────────────┘
+                             │
+                             ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │  6. Mongoose Model executes the database operation against  │
+  │     MongoDB Atlas (Create / Read / Update / Delete).       │
+  └──────────────────────────┬──────────────────────────────────┘
+                             │
+                             ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │  7. MongoDB Atlas returns the result to the Model.          │
+  │     The Controller formats the response payload.           │
+  └──────────────────────────┬──────────────────────────────────┘
+                             │
+                             ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │  8. Express sends the JSON response back to the frontend.   │
+  │     The UI updates to reflect the new state.               │
+  └─────────────────────────────────────────────────────────────┘
+```
 
-The system follows a client–server architecture. 
+---
 
-    Users interact with the application through a web-based interface 
-    The frontend sends requests to the backend server 
-    The backend processes logic related to habits, tracking, and gamification 
-    The backend communicates with the database to store and retrieve data 
-    Gamification rules are applied dynamically based on user actions 
-    All user progress is stored in a centralized database 
- 
+## Architecture Flowchart
 
-Low Level Design 
+```
+                        ┌─────────────────────┐
+                        │      User (UI)       │
+                        │  Browser Interface   │
+                        └──────────┬──────────┘
+                                   │
+                        ┌──────────▼──────────┐
+                        │   Frontend Layer     │
+                        │  HTML · CSS · JS     │
+                        └──────────┬──────────┘
+                                   │  HTTP Request
+                        ┌──────────▼──────────┐
+                        │   Middleware Layer   │
+                        │  JWT Auth · Validate │
+                        └──────────┬──────────┘
+                                   │
+                  ┌────────────────▼────────────────┐
+                  │           Express Router         │
+                  └────┬──────────────┬─────────────┘
+                       │              │
+           ┌───────────▼──┐    ┌──────▼───────────┐
+           │  Auth Routes  │    │   Habit Routes   │
+           │ /api/auth/... │    │  /api/habits/... │
+           └───────────┬───┘    └──────┬───────────┘
+                       │               │
+           ┌───────────▼───────────────▼───────────┐
+           │               Controllers              │
+           │     authController · habitController   │
+           └───────────────────┬───────────────────┘
+                               │
+           ┌───────────────────▼───────────────────┐
+           │              Mongoose Models           │
+           │          User · Habit · History        │
+           └───────────────────┬───────────────────┘
+                               │
+                    ┌──────────▼──────────┐
+                    │   MongoDB Atlas      │
+                    │  habit-tracker (DB)  │
+                    └──────────┬──────────┘
+                               │
+                    ┌──────────▼──────────┐
+                    │    JSON Response     │
+                    │  Returned to Client  │
+                    └─────────────────────┘
+```
 
-    The User Module manages authentication and profile data 
-    The Habit Module handles habit creation, updates, and deletion 
-    The Tracking Module records daily habit completion 
-    The Gamification Engine calculates points, streaks, and levels 
-    The Dashboard Module displays progress and achievements 
-    The Database Layer stores users, habits, logs, and rewards 
-    The Backend Server validates requests and manages data flow 
+---
 
- 
+## Project Structure
 
-Gamification Logic:
+```
+Daily-Habit-Tracker/
+│
+├── backend/
+│   ├── config/
+│   │   └── db.js                  # MongoDB Atlas connection setup
+│   │
+│   ├── controllers/
+│   │   ├── authController.js      # Registration, login logic
+│   │   └── habitController.js     # Habit CRUD and tracking logic
+│   │
+│   ├── models/
+│   │   ├── User.js                # Mongoose schema for users
+│   │   └── Habit.js               # Mongoose schema for habits
+│   │
+│   ├── routes/
+│   │   ├── authRoutes.js          # Auth endpoint definitions
+│   │   └── habitRoutes.js         # Habit endpoint definitions
+│   │
+│   ├── middleware/
+│   │   ├── authMiddleware.js      # JWT token verification
+│   │   └── validateMiddleware.js  # Request body validation
+│   │
+│   └── server.js                  # Application entry point
+│
+├── frontend/
+│   ├── css/
+│   │   └── style.css              # Application styles
+│   │
+│   ├── js/
+│   │   └── app.js                 # Client-side JavaScript logic
+│   │
+│   ├── pages/
+│   │   ├── dashboard.html         # Habit dashboard
+│   │   ├── analytics.html         # Analytics view
+│   │   └── login.html             # Login / Register page
+│   │
+│   └── index.html                 # Application entry HTML
+│
+├── .env                           # Environment variables (not committed)
+├── .gitignore                     # Git ignore rules
+├── package.json                   # Project metadata and dependencies
+└── README.md                      # Project documentation
+```
 
-    Each completed habit gives reward points 
-    Consecutive completions increase streak count 
-    Breaking a streak resets the counter 
-    Points contribute to level upgrades 
-    Badges are awarded for milestones such as: 
-    7-day streak 
-    30-day consistency 
-    Multiple habits maintained 
+---
 
- 
+## Prerequisites
 
-Technology Stack:
+Ensure the following are installed and configured on your system before proceeding:
 
-Frontend 
+| Requirement | Version | Download |
+|---|---|---|
+| **Node.js** | v14 or higher | [nodejs.org](https://nodejs.org/) |
+| **npm** | Bundled with Node.js | — |
+| **Git** | Any recent version | [git-scm.com](https://git-scm.com/) |
+| **MongoDB Atlas Account** | Free tier or above | [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas) |
 
-    HTML 
-    CSS 
-    JavaScript 
+> A MongoDB Atlas account is required. Create a free cluster, whitelist your IP address, and obtain your connection string from the Atlas dashboard before proceeding.
 
-Backend 
+---
 
-    Node.js 
-    Express.js 
+## Installation Guide
 
-Database 
+Follow these steps to get the project running on your local machine.
 
-    MongoDB 
+### Step 1 — Clone the Repository
 
-Tools & Environment 
+```bash
+git clone https://github.com/Krissh360/Daily-Habit-Tracker.git
+cd Daily-Habit-Tracker
+```
 
-    Visual Studio Code 
-    Web Browser
-    Git & GitHub 
+### Step 2 — Install Dependencies
 
- 
+Install dependencies for the backend:
 
-Future Enhancements:
+```bash
+cd backend
+npm install
+```
 
-    Mobile application version 
-    Reminder notifications 
-    Social leaderboard system 
-    AI-based habit suggestions 
-    Cloud-based data backup 
+If the frontend also has a package file:
+
+```bash
+cd ../frontend
+npm install
+```
+
+### Step 3 — Configure Environment Variables
+
+Create a `.env` file inside the `backend/` directory:
+
+```bash
+touch backend/.env
+```
+
+Add the following configuration to the file:
+
+```env
+# Server Configuration
+PORT=5000
+
+# MongoDB Atlas Connection String
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/habit-tracker?retryWrites=true&w=majority
+
+# JWT Secret Key — replace with a strong, random string
+JWT_SECRET=your_super_secret_key_here
+```
+
+Replace `<username>` and `<password>` with your MongoDB Atlas credentials. Your full connection string can be copied directly from the Atlas dashboard under **Connect > Connect your application**.
+
+> **Never commit your `.env` file to version control.** Ensure it is listed in `.gitignore`.
+
+### Step 4 — Start the Backend Server
+
+```bash
+cd backend
+npm start
+```
+
+The server will start at `http://localhost:5000`. On startup, Mongoose will establish a connection to your MongoDB Atlas cluster and log a confirmation to the console.
+
+### Step 5 — Launch the Frontend
+
+**If using static HTML files:**
+
+Open `frontend/index.html` directly in your browser, or serve it with a lightweight server:
+
+```bash
+# Using the VS Code Live Server extension, or:
+npx serve frontend
+```
+
+**If using a dev server:**
+
+```bash
+cd frontend
+npm run dev
+```
+
+The application will be accessible at `http://localhost:3000` (or the configured port).
+
+---
+
+## Usage Guide
+
+Once the application is running, follow these steps to get started:
+
+1. **Register an Account** — Navigate to the registration page and create a new user account with your name, email, and password.
+
+2. **Log In** — Sign in using your registered credentials. A JWT token will be issued to authenticate your session.
+
+3. **Create Habits** — From the dashboard, click **Add Habit** to create a new habit. Provide a name and any relevant details.
+
+4. **Track Daily Completions** — Each day, visit the dashboard and mark your habits as completed. Your progress is recorded and stored against the current date.
+
+5. **View Analytics** — Navigate to the **Analytics** section to view your daily and weekly completion rates, progress indicators, and historical trends.
+
+6. **Manage Habits** — Edit or delete existing habits from the dashboard at any time.
+
+---
+
+## API Reference
+
+All API endpoints are prefixed with `/api`. Requests to protected routes must include a valid JWT in the `Authorization` header:
+
+```
+Authorization: Bearer <your_token>
+```
+
+### Authentication
+
+| Method | Endpoint | Description | Auth Required |
+|---|---|---|---|
+| `POST` | `/api/auth/register` | Register a new user | No |
+| `POST` | `/api/auth/login` | Log in and receive a JWT | No |
+
+**Register — Request Body:**
+```json
+{
+  "name": "Krissh Chhabra",
+  "email": "krissh@example.com",
+  "password": "securepassword"
+}
+```
+
+**Login — Request Body:**
+```json
+{
+  "email": "krissh@example.com",
+  "password": "securepassword"
+}
+```
+
+---
+
+### Habits
+
+| Method | Endpoint | Description | Auth Required |
+|---|---|---|---|
+| `GET` | `/api/habits` | Fetch all habits for the logged-in user | Yes |
+| `POST` | `/api/habits` | Create a new habit | Yes |
+| `PUT` | `/api/habits/:id` | Update an existing habit by ID | Yes |
+| `DELETE` | `/api/habits/:id` | Delete a habit by ID | Yes |
+
+**Create Habit — Request Body:**
+```json
+{
+  "name": "Morning Run",
+  "description": "30-minute jog every morning"
+}
+```
+
+**Update Habit — Request Body:**
+```json
+{
+  "completed": true
+}
+```
+
+---
+
+## Roadmap
+
+The following enhancements are planned for future releases:
+
+- [ ] **Advanced Analytics** — Rich interactive charts using Chart.js or D3.js for streak tracking and visual heatmaps
+- [ ] **Mobile Responsive Design** — Fully optimized layout for smartphones and tablets
+- [ ] **Push Notifications & Reminders** — Daily habit reminders via browser notifications
+- [ ] **Multi-device Sync** — Seamless syncing of habit data across multiple devices
+- [ ] **AI-based Habit Recommendations** — Smart suggestions powered by completion trends and behavioral patterns
+- [ ] **Dark Mode** — Toggleable dark/light theme for better usability
+
+---
+
+## Contributing
+
+Contributions are welcome and encouraged. To contribute to this project:
+
+1. **Fork** this repository
+2. **Create** a new feature branch
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. **Commit** your changes with a clear, descriptive message
+   ```bash
+   git commit -m "feat: add weekly streak tracking"
+   ```
+4. **Push** the branch to your fork
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+5. **Open a Pull Request** against the `main` branch with a detailed description of your changes
+
+Please follow consistent code style and ensure your changes do not break existing functionality.
+
+---
+
+## License
+
+This project is intended for **educational and demonstration purposes**. All rights are reserved by the author unless otherwise stated.
+
+---
+
+## Author
+
+**Krissh Chhabra**
+(https://github.com/Krissh360)
+
+*Built with focus, consistency, and a genuine interest in full-stack development.*
