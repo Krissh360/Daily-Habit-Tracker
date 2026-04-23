@@ -1,8 +1,17 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 export default function Settings() {
 
     const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+      const userData = localStorage.getItem("user");
+      if (userData) {
+        setUser(JSON.parse(userData));
+      }
+    }, []);
 
   const handleLogout = () => {
   localStorage.removeItem("token");
@@ -36,8 +45,8 @@ export default function Settings() {
           </h2>
 
           <div className="space-y-2 text-gray-600">
-            <p><strong>Name:</strong> User</p>
-            <p><strong>Email:</strong> user@example.com</p>
+            <p><strong>Name:</strong> {user?.name || "Loading..."}</p>
+            <p><strong>Email:</strong> {user?.email || "Loading..."}</p>
             <p><strong>Account Type:</strong> Free</p>
           </div>
         </div>
