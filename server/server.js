@@ -20,17 +20,25 @@ app.get("/", (req, res) => {
 });
 
 // DB connection
-mongoose.connect(process.env.MONGO_URI, {
-  tlsAllowInvalidCertificates: true
-})
-  .then(() => {
+let isConnected = false;
+const connectDB = async () => {
+  if (isConnected) return;
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      tlsAllowInvalidCertificates: true,
+    });
+    isConnected = true;
     console.log("MongoDB Connected");
-
-    app.listen(5000, () =>
-      console.log("Server running on port 5000")
-    );
-  })
-  .catch(err => {
+  } catch (err) {
     console.error("Database connection error:", err);
-    process.exit(1);
-  });
+  }
+};
+
+connectDB();
+
+const PORT = process.env.PORT || 5000;
+if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+module.exports = app;

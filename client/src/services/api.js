@@ -1,7 +1,11 @@
-const BASE_URL = "http://localhost:5000/api";
+const API_ROOT = process.env.REACT_APP_API_URL
+  ? process.env.REACT_APP_API_URL.replace(/\/+$/, "")
+  : "";
+
+const BASE_URL = API_ROOT ? `${API_ROOT}/api` : "/api";
 
 export async function registerUser(data) {
-  const response = await fetch("http://localhost:5000/api/auth/register", {
+  const response = await fetch(`${BASE_URL}/auth/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -39,7 +43,7 @@ export async function loginUser(data) {
 export async function getHabits() {
   const token = localStorage.getItem("token");
 
-  const response = await fetch("http://localhost:5000/api/habits", {
+  const response = await fetch(`${BASE_URL}/habits`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -57,7 +61,7 @@ export async function getHabits() {
 export async function addHabit(name) {
   const token = localStorage.getItem("token");
 
-  const response = await fetch("http://localhost:5000/api/habits", {
+  const response = await fetch(`${BASE_URL}/habits`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -78,15 +82,12 @@ export async function addHabit(name) {
 export async function completeHabit(id) {
   const token = localStorage.getItem("token");
 
-  const response = await fetch(
-    `http://localhost:5000/api/habits/complete/${id}`,
-    {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const response = await fetch(`${BASE_URL}/habits/complete/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   const data = await response.json();
 
@@ -100,15 +101,12 @@ export async function completeHabit(id) {
 export async function deleteHabit(id) {
   const token = localStorage.getItem("token");
 
-  const response = await fetch(
-    `http://localhost:5000/api/habits/${id}`,
-    {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const response = await fetch(`${BASE_URL}/habits/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   const data = await response.json();
 
@@ -122,14 +120,11 @@ export async function deleteHabit(id) {
 export async function getAnalytics() {
   const token = localStorage.getItem("token");
 
-  const response = await fetch(
-    "http://localhost:5000/api/habits/analytics",
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const response = await fetch(`${BASE_URL}/habits/analytics`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   const data = await response.json();
 
@@ -138,4 +133,4 @@ export async function getAnalytics() {
   }
 
   return data;
-}
+}
