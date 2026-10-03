@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { getHabits } from "../services/api";
 import {
-  User,
   Flame,
   Award,
   CalendarCheck,
   Sparkles,
-  TrendingUp,
 } from "lucide-react";
 
 export default function Profile() {
