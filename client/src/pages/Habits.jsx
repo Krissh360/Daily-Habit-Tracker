@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 import { getHabits, addHabit, completeHabit, deleteHabit } from "../services/api";
+import {
+  Check,
+  Plus,
+  Trash2,
+  Flame,
+  CheckCircle2,
+  ClipboardList,
+} from "lucide-react";
 
 export default function Habits() {
   const [habits, setHabits] = useState([]);
@@ -54,93 +62,169 @@ export default function Habits() {
   };
 
   if (loading) {
-    return <p>Loading habits...</p>;
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="flex items-center gap-3 text-slate-500 dark:text-zinc-400">
+          <div className="w-5 h-5 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+          <span className="text-sm font-medium">Loading habits...</span>
+        </div>
+      </div>
+    );
   }
+
+  const completedCount = habits.filter((h) => h.completedDates?.includes(today)).length;
 
   return (
     <div className="space-y-6">
-      
       {/* Header */}
-      <h1 className="text-2xl font-bold text-gray-800">
-        My Habits 📋
-      </h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-zinc-100">
+            My Habits
+          </h1>
+          <p className="text-sm text-slate-500 dark:text-zinc-400 mt-1">
+            Organize, track, and maintain your regular routines.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+            <CheckCircle2 className="w-3.5 h-3.5" />
+            {completedCount} / {habits.length} Done Today
+          </span>
+        </div>
+      </div>
 
-      {/* Add Habit */}
-      <div className="bg-white p-6 rounded-xl shadow">
-        <h2 className="text-lg font-semibold mb-4">
+      {/* Add Habit Card */}
+      <div className="bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 shadow-sm rounded-2xl p-6 hover:border-slate-300 dark:hover:border-zinc-700 transition-all duration-200">
+        <span className="text-xs font-semibold tracking-wide uppercase text-slate-400 dark:text-zinc-500 block mb-1">
+          Create Routine
+        </span>
+        <h2 className="text-lg font-bold text-slate-900 dark:text-zinc-100 mb-4">
           Add New Habit
         </h2>
 
         <div className="flex gap-2">
           <input
             type="text"
-            placeholder="Enter habit..."
-            className="flex-1 p-2 border rounded-md"
+            placeholder="What habit do you want to build?"
+            className="flex-1 bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
             value={newHabit}
             onChange={(e) => setNewHabit(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleAddHabit();
+            }}
           />
 
           <button
             onClick={handleAddHabit}
-            className="bg-blue-600 text-white px-4 rounded-md hover:bg-blue-700"
+            className="bg-slate-900 text-white dark:bg-zinc-100 dark:text-zinc-900 px-5 py-2.5 rounded-xl text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 shadow-sm"
           >
-            Add
+            <Plus className="w-4 h-4" />
+            <span>Add</span>
           </button>
         </div>
       </div>
 
-      {/* Habits List */}
-      <div className="bg-white p-6 rounded-xl shadow">
-        <h2 className="text-lg font-semibold mb-4">
-          All Habits
-        </h2>
+      {/* Habits List Card */}
+      <div className="bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 shadow-sm rounded-2xl p-6 hover:border-slate-300 dark:hover:border-zinc-700 transition-all duration-200">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <span className="text-xs font-semibold tracking-wide uppercase text-slate-400 dark:text-zinc-500">
+              Overview
+            </span>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-zinc-100">
+              All Active Habits
+            </h2>
+          </div>
+          <span className="text-xs text-slate-400 dark:text-zinc-500 font-medium">
+            {habits.length} habits
+          </span>
+        </div>
 
         {habits.length === 0 ? (
-          <p className="text-gray-500">No habits yet.</p>
+          <div className="text-center py-12 border border-dashed border-slate-200 dark:border-zinc-800 rounded-xl">
+            <ClipboardList className="w-8 h-8 mx-auto text-slate-300 dark:text-zinc-600 mb-2" />
+            <p className="text-sm font-medium text-slate-600 dark:text-zinc-400">
+              No habits created yet.
+            </p>
+            <p className="text-xs text-slate-400 dark:text-zinc-500 mt-1">
+              Start building your daily ritual by adding a new habit above.
+            </p>
+          </div>
         ) : (
-          <ul className="space-y-2">
-            {habits.map((habit) => (
-              <li
-                key={habit._id}
-                className={`p-3 border rounded-md flex justify-between items-center ${
-                  habit.completedDates?.includes(today)
-                    ? "bg-green-100"
-                    : ""
-                }`}
-              >
-                <span>
-                  {habit.title}
-                  <span className="text-sm text-gray-500 ml-2">
-                    🔥 {habit.currentStreak}
-                  </span>
-                </span>
+          <ul className="divide-y divide-slate-100 dark:divide-zinc-800/60">
+            {habits.map((habit) => {
+              const isDone = habit.completedDates?.includes(today);
 
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleComplete(habit._id)}
-                    disabled={habit.completedDates?.includes(today)}
-                    className={`px-3 py-1 rounded-md text-white ${
-                      habit.completedDates?.includes(today)
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-green-600 hover:bg-green-700"
-                    }`}
-                  >
-                    {habit.completedDates?.includes(today) ? "Done" : "Complete"}
-                  </button>
+              return (
+                <li
+                  key={habit._id}
+                  className="py-3.5 flex items-center justify-between group transition-colors"
+                >
+                  <div className="flex items-center gap-3.5 min-w-0 flex-1 pr-4">
+                    {/* Circular Check Button */}
+                    <button
+                      type="button"
+                      onClick={() => handleComplete(habit._id)}
+                      disabled={isDone}
+                      aria-label={isDone ? "Completed" : "Mark as complete"}
+                      className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 flex-shrink-0 ${
+                        isDone
+                          ? "bg-emerald-500 text-white shadow-sm shadow-emerald-500/30"
+                          : "border-2 border-slate-300 dark:border-zinc-700 hover:border-emerald-500 text-transparent hover:text-emerald-500/50"
+                      }`}
+                    >
+                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                    </button>
 
-                  <button
-                    onClick={() => handleDelete(habit._id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </li>
-            ))}
+                    <div className="min-w-0 flex-1">
+                      <span
+                        className={`text-sm font-medium block truncate transition-colors ${
+                          isDone
+                            ? "line-through text-slate-400 dark:text-zinc-500"
+                            : "text-slate-900 dark:text-zinc-100"
+                        }`}
+                      >
+                        {habit.title}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 flex-shrink-0">
+                    {/* Streak Badge */}
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                      <Flame className="w-3.5 h-3.5" />
+                      <span>{habit.currentStreak || 0}</span>
+                    </span>
+
+                    {/* Complete button */}
+                    <button
+                      onClick={() => handleComplete(habit._id)}
+                      disabled={isDone}
+                      className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-all ${
+                        isDone
+                          ? "bg-slate-100 dark:bg-zinc-800 text-slate-400 dark:text-zinc-500 cursor-not-allowed"
+                          : "bg-emerald-500/10 hover:bg-emerald-500 text-emerald-600 hover:text-white dark:text-emerald-400 dark:hover:text-white"
+                      }`}
+                    >
+                      {isDone ? "Done" : "Complete"}
+                    </button>
+
+                    {/* Delete button */}
+                    <button
+                      onClick={() => handleDelete(habit._id)}
+                      aria-label="Delete habit"
+                      className="p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>
-
     </div>
   );
-}
+}

@@ -20,7 +20,9 @@ app.get("/", (req, res) => {
 });
 
 // DB connection
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, {
+  tlsAllowInvalidCertificates: true
+})
   .then(() => {
     console.log("MongoDB Connected");
 
