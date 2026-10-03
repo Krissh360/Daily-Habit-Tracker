@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import {
   LayoutDashboard,
   CheckSquare,
@@ -6,10 +7,40 @@ import {
   User,
   Settings,
   Sparkles,
+  Sun,
+  Moon,
 } from "lucide-react";
 
 export default function Sidebar() {
   const location = useLocation();
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    // Check initial dark mode from DOM or localStorage
+    const isDarkMode =
+      localStorage.getItem("theme") === "dark" ||
+      (!("theme" in localStorage) &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+    setIsDark(isDarkMode);
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const nextDark = !isDark;
+    setIsDark(nextDark);
+    if (nextDark) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  };
 
   const menuItems = [
     { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
@@ -38,9 +69,6 @@ export default function Sidebar() {
         </div>
 
         {/* Navigation Items */}
-        <div className="text-[11px] font-semibold tracking-wider uppercase text-slate-400 dark:text-zinc-500 px-3 mb-2">
-          Navigation
-        </div>
         <nav className="space-y-1">
           {menuItems.map((item) => {
             const Icon = item.icon;
@@ -70,14 +98,29 @@ export default function Sidebar() {
         </nav>
       </div>
 
-      {/* Footer / System Status */}
-      <div className="pt-4 border-t border-slate-100 dark:border-zinc-800/80 px-2 flex items-center justify-between text-xs text-slate-400 dark:text-zinc-500">
-        <span className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          All systems sync
-        </span>
-        <span className="text-[11px] font-mono opacity-80">v1.0</span>
+      {/* Footer / Theme Toggle Switch */}
+      <div className="pt-4 border-t border-slate-100 dark:border-zinc-800/80 px-2 flex items-center justify-between text-xs text-slate-500 dark:text-zinc-400">
+        <span className="text-xs font-medium">Theme</span>
+        <button
+          onClick={toggleTheme}
+          type="button"
+          aria-label="Toggle dark/light mode"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-zinc-700/80 bg-slate-50 dark:bg-zinc-800 hover:bg-slate-100 dark:hover:bg-zinc-700/80 text-slate-700 dark:text-zinc-300 text-xs font-medium transition-colors"
+        >
+          {isDark ? (
+            <>
+              <Moon className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Dark</span>
+            </>
+          ) : (
+            <>
+              <Sun className="w-3.5 h-3.5 text-amber-500" />
+              <span>Light</span>
+            </>
+          )}
+        </button>
       </div>
     </aside>
   );
-}
+}
+

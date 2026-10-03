@@ -101,9 +101,9 @@ export default function Profile() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 shadow-sm rounded-2xl p-6 hover:border-slate-300 dark:hover:border-zinc-700 transition-all duration-200">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-zinc-500">
+            <h2 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
               Total Habits
-            </span>
+            </h2>
             <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
               <CalendarCheck className="w-4 h-4" />
             </div>
@@ -118,14 +118,14 @@ export default function Profile() {
 
         <div className="bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 shadow-sm rounded-2xl p-6 hover:border-slate-300 dark:hover:border-zinc-700 transition-all duration-200">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-zinc-500">
+            <h2 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
               Strongest Habit
-            </span>
+            </h2>
             <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
               <Flame className="w-4 h-4" />
             </div>
           </div>
-          <p className="text-xl font-bold text-slate-900 dark:text-zinc-100 truncate" title={bestHabit.title}>
+          <p className="text-xl font-bold text-slate-900 dark:text-zinc-100 truncate capitalize" title={bestHabit.title}>
             {bestHabit.title || "None"}
           </p>
           <p className="text-xs font-medium text-amber-600 dark:text-amber-400 mt-1 flex items-center gap-1">
@@ -136,14 +136,14 @@ export default function Profile() {
 
         <div className="bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 shadow-sm rounded-2xl p-6 hover:border-slate-300 dark:hover:border-zinc-700 transition-all duration-200">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-zinc-500">
+            <h2 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
               Most Practiced
-            </span>
+            </h2>
             <div className="w-8 h-8 rounded-lg bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center">
               <Award className="w-4 h-4" />
             </div>
           </div>
-          <p className="text-xl font-bold text-slate-900 dark:text-zinc-100 truncate" title={mostCompleted.title}>
+          <p className="text-xl font-bold text-slate-900 dark:text-zinc-100 truncate capitalize" title={mostCompleted.title}>
             {mostCompleted.title || "None"}
           </p>
           <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400 mt-1">

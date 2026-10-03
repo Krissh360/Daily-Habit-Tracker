@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
-import { User as UserIcon } from "lucide-react";
 
 export default function Navbar() {
   const [userName, setUserName] = useState("User");
+
+  const formatFirstName = (rawName) => {
+    if (!rawName) return "User";
+    const cleaned = rawName.split(" ")[0].replace(/[0-9_.-]+$/g, "");
+    if (!cleaned) return rawName.split(" ")[0];
+    return cleaned.charAt(0).toUpperCase() + cleaned.slice(1).toLowerCase();
+  };
 
   useEffect(() => {
     try {
       const stored = localStorage.getItem("user");
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (parsed.name) setUserName(parsed.name);
+        if (parsed.name) setUserName(formatFirstName(parsed.name));
       }
     } catch (e) {
       // fallback
@@ -49,4 +55,5 @@ export default function Navbar() {
       </div>
     </header>
   );
-}
+}
+

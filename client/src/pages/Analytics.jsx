@@ -121,9 +121,9 @@ export default function Analytics() {
         {/* Total Habits */}
         <div className="bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 shadow-sm rounded-2xl p-5 hover:border-slate-300 dark:hover:border-zinc-700 transition-all duration-200">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-zinc-500">
+            <h2 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
               Total Habits
-            </span>
+            </h2>
             <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
               <BarChart3 className="w-4 h-4" />
             </div>
@@ -139,9 +139,9 @@ export default function Analytics() {
         {/* Total Completions */}
         <div className="bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 shadow-sm rounded-2xl p-5 hover:border-slate-300 dark:hover:border-zinc-700 transition-all duration-200">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-zinc-500">
+            <h2 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
               Completions
-            </span>
+            </h2>
             <div className="w-8 h-8 rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center">
               <CheckCircle className="w-4 h-4" />
             </div>
@@ -157,9 +157,9 @@ export default function Analytics() {
         {/* Average Streak */}
         <div className="bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 shadow-sm rounded-2xl p-5 hover:border-slate-300 dark:hover:border-zinc-700 transition-all duration-200">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-zinc-500">
+            <h2 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
               Avg Streak
-            </span>
+            </h2>
             <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
               <Flame className="w-4 h-4" />
             </div>
@@ -175,14 +175,14 @@ export default function Analytics() {
         {/* Most Consistent Habit */}
         <div className="bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 shadow-sm rounded-2xl p-5 hover:border-slate-300 dark:hover:border-zinc-700 transition-all duration-200">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-zinc-500">
+            <h2 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
               Top Habit
-            </span>
+            </h2>
             <div className="w-8 h-8 rounded-lg bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center">
               <Award className="w-4 h-4" />
             </div>
           </div>
-          <p className="text-lg font-bold text-slate-900 dark:text-zinc-100 mt-2 truncate" title={data?.mostConsistentHabit}>
+          <p className="text-lg font-bold text-slate-900 dark:text-zinc-100 mt-2 truncate capitalize" title={data?.mostConsistentHabit}>
             {data?.mostConsistentHabit || "None"}
           </p>
           <span className="text-xs text-slate-400 dark:text-zinc-500 mt-1 block">
@@ -194,14 +194,9 @@ export default function Analytics() {
       {/* Chart Section */}
       <div className="bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 shadow-sm rounded-2xl p-6 hover:border-slate-300 dark:hover:border-zinc-700 transition-all duration-200">
         <div className="flex items-center justify-between mb-6">
-          <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-zinc-500">
-              Distribution
-            </span>
-            <h2 className="text-lg font-bold text-slate-900 dark:text-zinc-100">
-              Performance Overview
-            </h2>
-          </div>
+          <h2 className="text-base font-semibold text-slate-900 dark:text-zinc-100">
+            Performance Overview
+          </h2>
           <span className="inline-flex items-center gap-1.5 text-xs text-slate-500 dark:text-zinc-400 bg-slate-100 dark:bg-zinc-800 px-3 py-1 rounded-full">
             <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
             Live sync

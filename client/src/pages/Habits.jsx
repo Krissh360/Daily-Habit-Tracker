@@ -96,10 +96,7 @@ export default function Habits() {
 
       {/* Add Habit Card */}
       <div className="bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 shadow-sm rounded-2xl p-6 hover:border-slate-300 dark:hover:border-zinc-700 transition-all duration-200">
-        <span className="text-xs font-semibold tracking-wide uppercase text-slate-400 dark:text-zinc-500 block mb-1">
-          Create Routine
-        </span>
-        <h2 className="text-lg font-bold text-slate-900 dark:text-zinc-100 mb-4">
+        <h2 className="text-base font-semibold text-slate-900 dark:text-zinc-100 mb-4">
           Add New Habit
         </h2>
 
@@ -128,14 +125,9 @@ export default function Habits() {
       {/* Habits List Card */}
       <div className="bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 shadow-sm rounded-2xl p-6 hover:border-slate-300 dark:hover:border-zinc-700 transition-all duration-200">
         <div className="flex items-center justify-between mb-4">
-          <div>
-            <span className="text-xs font-semibold tracking-wide uppercase text-slate-400 dark:text-zinc-500">
-              Overview
-            </span>
-            <h2 className="text-lg font-bold text-slate-900 dark:text-zinc-100">
-              All Active Habits
-            </h2>
-          </div>
+          <h2 className="text-base font-semibold text-slate-900 dark:text-zinc-100">
+            All Active Habits
+          </h2>
           <span className="text-xs text-slate-400 dark:text-zinc-500 font-medium">
             {habits.length} habits
           </span>
@@ -179,7 +171,7 @@ export default function Habits() {
 
                     <div className="min-w-0 flex-1">
                       <span
-                        className={`text-sm font-medium block truncate transition-colors ${
+                        className={`text-sm font-medium block truncate capitalize transition-colors ${
                           isDone
                             ? "line-through text-slate-400 dark:text-zinc-500"
                             : "text-slate-900 dark:text-zinc-100"
@@ -190,31 +182,18 @@ export default function Habits() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 flex-shrink-0">
+                  <div className="flex items-center gap-2 flex-shrink-0">
                     {/* Streak Badge */}
                     <span className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400">
                       <Flame className="w-3.5 h-3.5" />
                       <span>{habit.currentStreak || 0}</span>
                     </span>
 
-                    {/* Complete button */}
-                    <button
-                      onClick={() => handleComplete(habit._id)}
-                      disabled={isDone}
-                      className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-all ${
-                        isDone
-                          ? "bg-slate-100 dark:bg-zinc-800 text-slate-400 dark:text-zinc-500 cursor-not-allowed"
-                          : "bg-emerald-500/10 hover:bg-emerald-500 text-emerald-600 hover:text-white dark:text-emerald-400 dark:hover:text-white"
-                      }`}
-                    >
-                      {isDone ? "Done" : "Complete"}
-                    </button>
-
-                    {/* Delete button */}
+                    {/* Subtle hover-only delete button */}
                     <button
                       onClick={() => handleDelete(habit._id)}
                       aria-label="Delete habit"
-                      className="p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition-colors"
+                      className="p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-150"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
