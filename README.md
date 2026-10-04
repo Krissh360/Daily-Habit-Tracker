@@ -1,4 +1,4 @@
-# Daily Habit Tracker
+# Grind Set
 
 ### Build better habits. Track daily progress. Analyze your consistency.
 
@@ -28,11 +28,11 @@
 
 ## Project Overview
 
-**Daily Habit Tracker** is a full-stack web application designed to help individuals build consistency, track daily habits, and improve long-term productivity through structured progress monitoring and analytics.
+**Grind Set** is a full-stack web application designed to help individuals build consistency, track daily habits, and improve long-term productivity through structured progress monitoring and analytics.
 
 The application provides a clean, intuitive interface that allows users to register, log in, manage their personal habits, mark daily completions, and visualize their performance over time — all backed by a robust RESTful API and a scalable MVC-based backend architecture connected to MongoDB Atlas.
 
-Whether you're trying to maintain a morning routine, hit daily fitness goals, or stay consistent with learning, Daily Habit Tracker gives you the structure and insight to stay on track.
+Whether you're trying to maintain a morning routine, hit daily fitness goals, or stay consistent with learning, Grind Set gives you the structure and insight to stay on track.
 
 ---
 
