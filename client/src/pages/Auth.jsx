@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser, registerUser } from "../services/api";
-import { Sparkles, ArrowRight, Lock, Mail, UserRound } from "lucide-react";
+import { ArrowRight, Lock, Mail, UserRound } from "lucide-react";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
@@ -53,15 +53,15 @@ export default function Auth() {
     <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 flex flex-col justify-center items-center p-4">
       {/* Branding */}
       <div className="flex items-center gap-3 mb-8">
-        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
-          <Sparkles className="w-5 h-5" />
+        <div className="w-10 h-10 rounded-2xl bg-emerald-50 flex items-center justify-center shadow-md shadow-emerald-500/20 overflow-hidden">
+          <img src="/grind-set-logo.svg" alt="Grind Set" className="w-9 h-9" />
         </div>
         <div>
           <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-zinc-100 block">
-            Habit Tracker
+            Grind Set
           </span>
           <span className="text-xs font-medium text-slate-400 dark:text-zinc-500 tracking-wider uppercase">
-            Calm Organic Productivity
+            Daily Momentum
           </span>
         </div>
       </div>
