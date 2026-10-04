@@ -12,7 +12,41 @@ import {
   TrendingUp,
   Target,
   MoreHorizontal,
+  Quote,
 } from "lucide-react";
+
+const motivationQuotes = [
+  "Small steps still move you forward.",
+  "Consistency turns intention into identity.",
+  "Start where you are and make today count.",
+  "Progress is built in the moments nobody sees.",
+  "You do not need perfect conditions to make progress.",
+  "A focused day is made one choice at a time.",
+  "Keep the promise you made to your future self.",
+  "Momentum begins with one completed action.",
+  "Your habits are votes for the person you are becoming.",
+  "Make it simple enough to repeat.",
+  "The work gets lighter when the rhythm becomes yours.",
+  "Do the next right thing, then do it again tomorrow.",
+  "Discipline is self-respect in motion.",
+  "A little progress is still progress worth keeping.",
+  "Build a routine that makes your best days easier.",
+  "You are closer than you think when you keep showing up.",
+  "Let today's effort compound quietly.",
+  "The habit grows every time you return to it.",
+  "Progress does not need an audience.",
+  "Choose the action that future you will thank you for.",
+  "Your pace is valid. Your direction matters.",
+  "Make room for progress, not perfection.",
+  "Every repetition makes the path more familiar.",
+  "The best time to reinforce a good habit is today.",
+  "You can be patient and still be persistent.",
+  "Tiny wins are how meaningful change gets built.",
+  "Keep going; consistency is creating the result.",
+  "One grounded choice can change the shape of your day.",
+  "Your future routine starts with this moment.",
+  "Show up gently, then give your effort room to grow.",
+];
 
 export default function Dashboard() {
   const [habits, setHabits] = useState([]);
@@ -109,6 +143,8 @@ export default function Dashboard() {
 
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const currentDayIndex = (new Date().getDay() + 6) % 7; // 0 for Mon ... 6 for Sun
+  const dayOfMonth = new Date().getDate();
+  const motivation = motivationQuotes[(dayOfMonth - 1) % motivationQuotes.length];
 
   if (loading) {
     return (
@@ -157,6 +193,24 @@ export default function Dashboard() {
                 style={{ width: `${completionPercent}%` }}
               />
             </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-emerald-500 to-teal-600 shadow-sm rounded-2xl p-6 text-white">
+            <div className="flex items-center justify-between gap-4 mb-4">
+              <div className="flex items-center gap-2">
+                <Quote className="w-4 h-4 text-emerald-100" />
+                <h2 className="text-base font-semibold">Today's Motivation</h2>
+              </div>
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-emerald-100">
+                Day {dayOfMonth > 30 ? 30 : dayOfMonth} of 30
+              </span>
+            </div>
+            <p className="text-lg font-semibold leading-relaxed max-w-2xl">
+              “{motivation}”
+            </p>
+            <p className="text-xs text-emerald-100 mt-3">
+              Keep your rhythm moving forward.
+            </p>
           </div>
 
           {/* 2. "Today's Habits" Card with Embedded Quick Add */}
