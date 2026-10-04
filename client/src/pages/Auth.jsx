@@ -17,6 +17,16 @@ export default function Auth() {
     try {
       setError("");
 
+      if (!email.trim() || !password) {
+        setError("Enter your user ID and password to continue.");
+        return;
+      }
+
+      if (!isLogin && !username.trim()) {
+        setError("Choose a username to create your account.");
+        return;
+      }
+
       let data;
 
       if (isLogin) {
@@ -54,7 +64,7 @@ export default function Auth() {
       {/* Branding */}
       <div className="flex items-center gap-3 mb-8">
         <div className="w-10 h-10 rounded-2xl bg-emerald-50 flex items-center justify-center shadow-md shadow-emerald-500/20 overflow-hidden">
-          <img src="/grind-set-logo.svg" alt="Grind Set" className="w-9 h-9" />
+          <img src="/flame-logo.png" alt="Grind Set" className="w-9 h-9" />
         </div>
         <div>
           <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-zinc-100 block">
@@ -107,7 +117,7 @@ export default function Auth() {
 
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-zinc-500 mb-1.5">
-              Email Address
+                User ID (Email)
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
