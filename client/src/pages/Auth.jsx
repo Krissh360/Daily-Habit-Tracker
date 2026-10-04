@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser, registerUser } from "../services/api";
-import { Sparkles, ArrowRight, Lock, Mail } from "lucide-react";
+import { ArrowRight, Lock, Mail, UserRound } from "lucide-react";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -16,6 +17,16 @@ export default function Auth() {
     try {
       setError("");
 
+      if (!email.trim() || !password) {
+        setError("Enter your user ID and password to continue.");
+        return;
+      }
+
+      if (!isLogin && !username.trim()) {
+        setError("Choose a username to create your account.");
+        return;
+      }
+
       let data;
 
       if (isLogin) {
@@ -23,22 +34,25 @@ export default function Auth() {
 
         localStorage.setItem("token", data.token);
 
-        const username = email.split("@")[0];
+        const fallbackName = email.split("@")[0];
+        const profile = data.user || {};
 
         localStorage.setItem(
           "user",
           JSON.stringify({
-            name: username.charAt(0).toUpperCase() + username.slice(1),
+            ...profile,
+            name: profile.username || fallbackName,
             email: email,
           })
         );
 
         navigate("/dashboard");
       } else {
-        await registerUser({ email, password });
+        await registerUser({ username, email, password });
 
         alert("Registered successfully! Please login.");
         setIsLogin(true);
+        setUsername("");
       }
     } catch (err) {
       setError(err.message);
@@ -49,15 +63,15 @@ export default function Auth() {
     <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 flex flex-col justify-center items-center p-4">
       {/* Branding */}
       <div className="flex items-center gap-3 mb-8">
-        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
-          <Sparkles className="w-5 h-5" />
+        <div className="w-10 h-10 rounded-2xl bg-emerald-50 flex items-center justify-center shadow-md shadow-emerald-500/20 overflow-hidden">
+          <img src="/flame-logo.png" alt="Grind Set" className="w-9 h-9" />
         </div>
         <div>
           <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-zinc-100 block">
-            Habit Tracker
+            Grind Set
           </span>
           <span className="text-xs font-medium text-slate-400 dark:text-zinc-500 tracking-wider uppercase">
-            Calm Organic Productivity
+            Daily Momentum
           </span>
         </div>
       </div>
@@ -80,9 +94,30 @@ export default function Auth() {
         )}
 
         <div className="space-y-4">
+          {!isLogin && (
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-zinc-500 mb-1.5">
+                Username
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                  <UserRound className="w-4 h-4" />
+                </div>
+                <input
+                  type="text"
+                  placeholder="Choose a username"
+                  maxLength={30}
+                  className="w-full bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700/60 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </div>
+            </div>
+          )}
+
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-zinc-500 mb-1.5">
-              Email Address
+                User ID (Email)
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -140,4 +175,4 @@ export default function Auth() {
       </div>
     </div>
   );
-}
+}

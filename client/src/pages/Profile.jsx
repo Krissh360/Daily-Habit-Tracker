@@ -60,7 +60,8 @@ export default function Profile() {
     {}
   );
 
-  const initial = user?.name ? user.name.charAt(0).toUpperCase() : "U";
+  const displayName = user?.username || user?.name || "Habit Builder";
+  const initial = displayName.charAt(0).toUpperCase();
 
   return (
     <div className="space-y-6">
@@ -82,7 +83,7 @@ export default function Profile() {
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <h2 className="text-lg font-bold text-slate-900 dark:text-zinc-100 truncate">
-              {user?.name || "Habit Builder"}
+              {displayName}
             </h2>
             <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2.5 py-0.5 rounded-full text-xs font-semibold">
               Active Member
@@ -166,4 +167,4 @@ export default function Profile() {
       </div>
     </div>
   );
-}
+}

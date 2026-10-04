@@ -6,7 +6,6 @@ import {
   BarChart3,
   User,
   Settings,
-  Sparkles,
   Sun,
   Moon,
 } from "lucide-react";
@@ -40,6 +39,7 @@ export default function Sidebar() {
       document.documentElement.classList.remove("dark");
       localStorage.setItem("theme", "light");
     }
+    window.dispatchEvent(new Event("themeUpdated"));
   };
 
   const menuItems = [
@@ -55,15 +55,15 @@ export default function Sidebar() {
       <div>
         {/* Top Branding */}
         <div className="flex items-center gap-3 px-2 py-3 mb-6">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-sm shadow-emerald-500/20">
-            <Sparkles className="w-5 h-5" />
+          <div className="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center shadow-sm shadow-emerald-500/20 overflow-hidden">
+            <img src="/flame-logo.png" alt="Grind Set" className="w-8 h-8" />
           </div>
           <div className="leading-tight">
             <span className="font-bold text-base tracking-tight text-slate-900 dark:text-zinc-100 block">
-              Habit Tracker
+              Grind Set
             </span>
             <span className="text-[11px] font-medium text-slate-400 dark:text-zinc-500 tracking-wide uppercase">
-              Daily Rhythm
+              Daily Momentum
             </span>
           </div>
         </div>
@@ -123,4 +123,4 @@ export default function Sidebar() {
     </aside>
   );
 }
-
+

@@ -4,10 +4,28 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
+function verifyToken(req, res, next) {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return res.status(401).json({ message: "No token" });
+
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.userId = decoded.id;
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
+}
+
 // REGISTER
 router.post("/register", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { username, email, password } = req.body;
+
+    if (!username?.trim() || !email?.trim() || !password) {
+      return res.status(400).json({ message: "Username, email, and password are required" });
+    }
 
     // check if user exists
     const existingUser = await User.findOne({ email });
@@ -20,6 +38,7 @@ router.post("/register", async (req, res) => {
 
     // create user
     const user = new User({
+      username: username.trim(),
       email,
       password: hashedPassword,
     });
@@ -52,6 +71,28 @@ router.post("/login", async (req, res) => {
 res.json({ token, user: others });
   } catch (err) {
     res.status(500).json(err.message);
+  }
+});
+
+router.patch("/profile", verifyToken, async (req, res) => {
+  try {
+    const username = req.body.username?.trim();
+
+    if (!username || username.length < 2 || username.length > 30) {
+      return res.status(400).json({ message: "Username must be between 2 and 30 characters" });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      { username },
+      { new: true, runValidators: true }
+    ).select("-password");
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({ user });
+  } catch (err) {
+    res.status(500).json({ message: "Unable to update profile" });
   }
 });
 
