@@ -40,6 +40,27 @@ export async function loginUser(data) {
   return result;
 }
 
+export async function updateProfile(username) {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${BASE_URL}/auth/profile`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ username }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to update profile");
+  }
+
+  return data;
+}
+
 export async function getHabits() {
   const token = localStorage.getItem("token");
 
@@ -133,4 +154,4 @@ export async function getAnalytics() {
   }
 
   return data;
-}
+}

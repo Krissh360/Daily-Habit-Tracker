@@ -93,11 +93,18 @@ export default function Dashboard() {
       const stored = localStorage.getItem("user");
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (parsed.name) setUserName(formatFirstName(parsed.name));
+        if (parsed.username || parsed.name) setUserName(formatFirstName(parsed.username || parsed.name));
       }
     } catch (e) {
       // fallback
     }
+
+    const handleUserUpdated = () => {
+      const updated = JSON.parse(localStorage.getItem("user") || "{}");
+      setUserName(formatFirstName(updated.username || updated.name));
+    };
+    window.addEventListener("userUpdated", handleUserUpdated);
+    return () => window.removeEventListener("userUpdated", handleUserUpdated);
   }, []);
 
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
