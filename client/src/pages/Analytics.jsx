@@ -8,42 +8,9 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import {
-  Chart as ChartJS,
-  BarController,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  Legend,
-} from "chart.js";
-
-import { Bar } from "react-chartjs-2";
-
-ChartJS.register(
-  BarController,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  Legend
-);
-
 export default function Analytics() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isDark, setIsDark] = useState(() =>
-    document.documentElement.classList.contains("dark")
-  );
-
-  useEffect(() => {
-    const handleThemeUpdated = () => {
-      setIsDark(document.documentElement.classList.contains("dark"));
-    };
-
-    window.addEventListener("themeUpdated", handleThemeUpdated);
-    return () => window.removeEventListener("themeUpdated", handleThemeUpdated);
-  }, []);
 
   useEffect(() => {
     async function fetchAnalytics() {
@@ -71,59 +38,12 @@ export default function Analytics() {
     );
   }
 
-  const chartData = {
-    labels: ["Habits", "Completions", "Avg Streak"],
-    datasets: [
-      {
-        label: "Your Stats",
-        data: [
-          data?.totalHabits || 0,
-          data?.totalCompletions || 0,
-          data?.averageStreak || 0,
-        ],
-        backgroundColor: [
-          "rgba(16, 185, 129, 0.85)", // emerald
-          "rgba(14, 165, 233, 0.85)", // sky
-          "rgba(245, 158, 11, 0.85)", // amber
-        ],
-        borderRadius: 8,
-      },
-    ],
-  };
-
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    color: isDark ? "#d4d4d8" : "#334155",
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        backgroundColor: "#0f172a",
-        padding: 10,
-        cornerRadius: 8,
-      },
-    },
-    scales: {
-      y: {
-        grid: {
-          color: isDark ? "rgba(161, 161, 170, 0.2)" : "rgba(148, 163, 184, 0.15)",
-        },
-        ticks: {
-          color: isDark ? "#a1a1aa" : "#64748b",
-        },
-      },
-      x: {
-        grid: {
-          display: false,
-        },
-        ticks: {
-          color: isDark ? "#a1a1aa" : "#64748b",
-        },
-      },
-    },
-  };
+  const chartStats = [
+    { label: "Habits", value: Number(data?.totalHabits) || 0, color: "bg-emerald-500" },
+    { label: "Completions", value: Number(data?.totalCompletions) || 0, color: "bg-sky-500" },
+    { label: "Avg Streak", value: Number(data?.averageStreak) || 0, color: "bg-amber-500" },
+  ];
+  const chartMax = Math.max(...chartStats.map((stat) => stat.value), 1);
 
   return (
     <div className="space-y-6">
@@ -224,8 +144,28 @@ export default function Analytics() {
           </span>
         </div>
 
-        <div className="h-64 sm:h-72">
-          <Bar data={chartData} options={options} />
+        <div
+          className="h-64 sm:h-72 rounded-xl bg-slate-50/80 dark:bg-zinc-950/50 border border-slate-100 dark:border-zinc-800/80 px-5 pt-5 pb-4 flex items-end gap-6 sm:gap-10"
+          role="img"
+          aria-label="Bar chart showing habits, completions, and average streak"
+        >
+          {chartStats.map((stat) => (
+            <div key={stat.label} className="flex-1 h-full flex flex-col items-center justify-end gap-3 min-w-0">
+              <span className="text-xs font-semibold text-slate-700 dark:text-zinc-300">
+                {stat.value}
+              </span>
+              <div className="w-full max-w-20 h-full flex items-end">
+                <div
+                  className={`w-full ${stat.color} rounded-t-xl transition-[height] duration-500 ease-out`}
+                  style={{ height: `${Math.max((stat.value / chartMax) * 100, stat.value > 0 ? 8 : 2)}%` }}
+                  title={`${stat.label}: ${stat.value}`}
+                />
+              </div>
+              <span className="text-xs font-medium text-slate-500 dark:text-zinc-400 text-center truncate w-full">
+                {stat.label}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </div>
