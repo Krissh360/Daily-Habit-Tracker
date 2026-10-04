@@ -1,496 +1,579 @@
 # Grind Set
 
-### Build better habits. Track daily progress. Analyze your consistency.
+> Daily momentum for meaningful habits.
 
-> A full-stack web application to help users build consistency, track daily habits, and gain actionable insights into their long-term productivity.
+Grind Set is a full-stack habit tracking application for creating routines, recording daily completions, maintaining streaks, and reviewing consistency over time. It provides account-based habit data, username personalization, a focused dashboard, analytics, theme switching, and daily motivation.
 
----
+## Contents
 
-## Table of Contents
+- [Product Overview](#product-overview)
+- [Current Features](#current-features)
+- [Technology Stack](#technology-stack)
+- [Architecture](#architecture)
+- [Application Flow](#application-flow)
+- [Repository Structure](#repository-structure)
+- [Data Model](#data-model)
+- [Prerequisites](#prerequisites)
+- [Local Development](#local-development)
+- [Environment Variables](#environment-variables)
+- [Available Scripts](#available-scripts)
+- [API Reference](#api-reference)
+- [Deployment](#deployment)
+- [Security Notes](#security-notes)
+- [Validation and Troubleshooting](#validation-and-troubleshooting)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+- [Author](#author)
 
-1. [Project Overview](#project-overview)
-2. [Features](#features)
-3. [Tech Stack](#tech-stack)
-4. [System Architecture](#system-architecture)
-5. [Execution Flow](#execution-flow)
-6. [Architecture Flowchart](#architecture-flowchart)
-7. [Project Structure](#project-structure)
-8. [Prerequisites](#prerequisites)
-9. [Installation Guide](#installation-guide)
-10. [Usage Guide](#usage-guide)
-11. [API Reference](#api-reference)
-12. [Roadmap](#roadmap)
-13. [Contributing](#contributing)
-14. [License](#license)
-15. [Author](#author)
+## Product Overview
 
----
+Grind Set helps users turn small repeated actions into durable routines. Each account has its own habits and completion history. Users can:
 
-## Project Overview
+1. Create an account with a username, email-based user ID, and password.
+2. Sign in and receive a JWT-backed session.
+3. Create habits and mark them complete for the current day.
+4. Review streaks, completions, and consistency analytics.
+5. Update their username from Settings.
+6. Switch between light and dark themes.
+7. Receive a deterministic daily motivation quote from a 30-quote rotation.
 
-**Grind Set** is a full-stack web application designed to help individuals build consistency, track daily habits, and improve long-term productivity through structured progress monitoring and analytics.
+Passwords are hashed on the server with bcrypt before being stored. Habit records are associated with the authenticated user's MongoDB ID.
 
-The application provides a clean, intuitive interface that allows users to register, log in, manage their personal habits, mark daily completions, and visualize their performance over time — all backed by a robust RESTful API and a scalable MVC-based backend architecture connected to MongoDB Atlas.
+## Current Features
 
-Whether you're trying to maintain a morning routine, hit daily fitness goals, or stay consistent with learning, Grind Set gives you the structure and insight to stay on track.
+### Authentication and Accounts
 
----
+- Account registration with username, email user ID, and password.
+- Login with email and password.
+- bcrypt password hashing.
+- JWT authentication for protected API requests.
+- Protected client routes for Dashboard, Habits, Analytics, Profile, and Settings.
+- Username editing from Settings.
+- Local profile display synchronized across the Dashboard, Navbar, Profile, and Settings views.
 
-## Features
+### Habit Tracking
 
-### User Management
-- Secure user registration and login
-- JWT-based authentication
-- Individual profile management per user
+- Create a habit from the Dashboard or Habits page.
+- Prevent duplicate habit names for the same user, case-insensitively.
+- Mark a habit complete once per day.
+- Store completion dates as historical records.
+- Calculate current and longest streaks.
+- Delete habits belonging to the authenticated user.
 
-### Habit Management
-- Create, update, and delete personal habits
-- Mark habits as completed on a daily basis
-- Maintain full historical completion records
+### Dashboard
 
-### Analytics Dashboard
-- Visual representation of habit completion rates
-- Daily and weekly performance tracking
-- Progress indicators to highlight streaks and gaps
+- Daily completion count and progress bar.
+- Habit list with completion controls and streak badges.
+- Best current streak summary.
+- Seven-day activity indicators.
+- Daily motivation card using a 30-quote calendar rotation.
 
-### System Design
-- RESTful API architecture
-- MVC pattern with strict separation of concerns
-- Cloud-hosted MongoDB Atlas integration
-- Middleware-based authentication and request validation
+### Analytics and Preferences
 
----
+- Total habits.
+- Total completions.
+- Average streak.
+- Most consistent habit.
+- Native responsive performance bar chart that works in light and dark themes.
+- Light and dark theme toggle with persisted browser preference.
+- Grind Set branding and supplied flame logo.
 
-## Tech Stack
+## Technology Stack
 
-| Layer | Technology | Purpose |
-|---|---|---|
-| **Frontend** | HTML5, CSS3, JavaScript (ES6+) | User interface and client-side logic |
-| **Backend** | Node.js, Express.js | Server, routing, and API handling |
-| **Database** | MongoDB Atlas + Mongoose | Cloud data storage and schema modeling |
-| **Authentication** | JSON Web Tokens (JWT) | Secure user session management |
-| **Dev Tools** | Git, GitHub, VS Code, Postman | Version control, development, API testing |
+| Layer | Technology | Role |
+| --- | --- | --- |
+| Frontend | React 19, React Router, Tailwind CSS | Single-page application and layouts |
+| Icons | Lucide React | Interface icons |
+| Backend | Node.js, Express 5 | REST API and request handling |
+| Database | MongoDB Atlas, Mongoose | Persistent user and habit data |
+| Authentication | bcryptjs, JSON Web Tokens | Password hashing and authenticated sessions |
+| Deployment | Vercel, Render, MongoDB Atlas | Frontend hosting, API hosting, and database |
+| Tooling | npm, Git, GitHub, Create React App | Development and source control |
 
----
+## Architecture
 
-## System Architecture
+The repository contains two independently runnable applications:
 
-The application is built on a **layered MVC architecture** with a clear, strict separation between the presentation layer, business logic, and data access. This design ensures modularity, testability, and long-term scalability.
+- `client`: React frontend served locally on port 3000 by default and deployed to Vercel.
+- `server`: Express API served locally on port 5000 by default and deployed to Render.
+- MongoDB Atlas: shared persistent data store accessed only by the server.
 
-```
-┌──────────────────────────────────────────┐
-│             PRESENTATION LAYER           │
-│         HTML5 · CSS3 · JavaScript        │
-│   (User-facing Interface & DOM Logic)    │
-└────────────────────┬─────────────────────┘
-                     │  HTTP Requests / Responses
-┌────────────────────▼─────────────────────┐
-│               API LAYER                  │
-│          Express.js Routes               │
-│    (Request Routing & Middleware Auth)   │
-└────────────────────┬─────────────────────┘
-                     │
-┌────────────────────▼─────────────────────┐
-│           BUSINESS LOGIC LAYER           │
-│              Controllers                 │
-│  (Request Handling, Validation, Logic)   │
-└────────────────────┬─────────────────────┘
-                     │
-┌────────────────────▼─────────────────────┐
-│           DATA ACCESS LAYER              │
-│          Mongoose Models                 │
-│      (Schema Definition & Queries)       │
-└────────────────────┬─────────────────────┘
-                     │
-┌────────────────────▼─────────────────────┐
-│            DATABASE LAYER                │
-│          MongoDB Atlas (Cloud)           │
-│     (Persistent Cloud Data Storage)      │
-└──────────────────────────────────────────┘
-```
-
----
-
-## Execution Flow
-
-The following describes the complete lifecycle of a request through the application:
-
-```
-  User Interaction
-       │
-       ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │  1. User performs an action on the frontend (e.g., adds a   │
-  │     habit, marks it complete, views analytics).             │
-  └──────────────────────────┬──────────────────────────────────┘
-                             │
-                             ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │  2. Frontend sends an HTTP Request to the Express API.      │
-  │     (GET / POST / PUT / DELETE)                             │
-  └──────────────────────────┬──────────────────────────────────┘
-                             │
-                             ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │  3. Middleware runs first.                                  │
-  │     — JWT token is verified for protected routes.          │
-  │     — Request body is validated.                           │
-  └──────────────────────────┬──────────────────────────────────┘
-                             │
-                             ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │  4. Express Router matches the route and forwards           │
-  │     the request to the appropriate Controller.             │
-  └──────────────────────────┬──────────────────────────────────┘
-                             │
-                             ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │  5. Controller processes the business logic:                │
-  │     — Reads or mutates data as required.                   │
-  │     — Calls the relevant Mongoose Model methods.           │
-  └──────────────────────────┬──────────────────────────────────┘
-                             │
-                             ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │  6. Mongoose Model executes the database operation against  │
-  │     MongoDB Atlas (Create / Read / Update / Delete).       │
-  └──────────────────────────┬──────────────────────────────────┘
-                             │
-                             ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │  7. MongoDB Atlas returns the result to the Model.          │
-  │     The Controller formats the response payload.           │
-  └──────────────────────────┬──────────────────────────────────┘
-                             │
-                             ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │  8. Express sends the JSON response back to the frontend.   │
-  │     The UI updates to reflect the new state.               │
-  └─────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart LR
+    Browser[User browser] --> Client[React client on Vercel]
+    Client -->|HTTPS JSON requests| API[Express API on Render]
+    API --> Auth[Auth routes]
+    API --> Habits[Habit routes]
+    Auth --> Models[Mongoose models]
+    Habits --> Models
+    Models --> DB[(MongoDB Atlas)]
+    API --> JWT[JWT verification]
+    JWT --> Habits
 ```
 
----
+The frontend never connects directly to MongoDB. It sends the JWT in the `Authorization` header when calling protected habit and profile endpoints.
 
-## Architecture Flowchart
+## Application Flow
 
-```
-                        ┌─────────────────────┐
-                        │      User (UI)       │
-                        │  Browser Interface   │
-                        └──────────┬──────────┘
-                                   │
-                        ┌──────────▼──────────┐
-                        │   Frontend Layer     │
-                        │  HTML · CSS · JS     │
-                        └──────────┬──────────┘
-                                   │  HTTP Request
-                        ┌──────────▼──────────┐
-                        │   Middleware Layer   │
-                        │  JWT Auth · Validate │
-                        └──────────┬──────────┘
-                                   │
-                  ┌────────────────▼────────────────┐
-                  │           Express Router         │
-                  └────┬──────────────┬─────────────┘
-                       │              │
-           ┌───────────▼──┐    ┌──────▼───────────┐
-           │  Auth Routes  │    │   Habit Routes   │
-           │ /api/auth/... │    │  /api/habits/... │
-           └───────────┬───┘    └──────┬───────────┘
-                       │               │
-           ┌───────────▼───────────────▼───────────┐
-           │               Controllers              │
-           │     authController · habitController   │
-           └───────────────────┬───────────────────┘
-                               │
-           ┌───────────────────▼───────────────────┐
-           │              Mongoose Models           │
-           │          User · Habit · History        │
-           └───────────────────┬───────────────────┘
-                               │
-                    ┌──────────▼──────────┐
-                    │   MongoDB Atlas      │
-                    │  habit-tracker (DB)  │
-                    └──────────┬──────────┘
-                               │
-                    ┌──────────▼──────────┐
-                    │    JSON Response     │
-                    │  Returned to Client  │
-                    └─────────────────────┘
+### Account and Session Flow
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant UI as React Auth page
+    participant API as Express API
+    participant DB as MongoDB Atlas
+    participant Browser as Browser storage
+
+    User->>UI: Submit username, email, and password
+    UI->>API: POST /api/auth/register
+    API->>API: Hash password with bcrypt
+    API->>DB: Save username, email, and password hash
+    DB-->>API: Registration result
+    API-->>UI: Registration confirmation
+
+    User->>UI: Submit email and password
+    UI->>API: POST /api/auth/login
+    API->>DB: Find user by email
+    API->>API: Compare password hash and sign JWT
+    API-->>UI: JWT and user profile
+    UI->>Browser: Store token and display profile
 ```
 
----
+### Protected Habit Request Flow
 
-## Project Structure
-
+```mermaid
+flowchart TD
+    Action[User creates or completes a habit] --> Request[Client sends API request]
+    Request --> Header{Bearer token present?}
+    Header -->|No| Unauthorized[Return authentication error]
+    Header -->|Yes| Verify[Verify JWT and extract user ID]
+    Verify --> Query[Query or mutate habit records for that user]
+    Query --> Mongo[(MongoDB Atlas)]
+    Mongo --> Response[Return JSON response]
+    Response --> UI[Update React view]
 ```
+
+### Request Lifecycle
+
+```text
+User interaction
+      |
+      v
+React component
+      |
+      v
+Client API service
+      |
+      |  HTTP request with optional Bearer token
+      v
+Express route
+      |
+      v
+JWT verification for protected routes
+      |
+      v
+Mongoose query
+      |
+      v
+MongoDB Atlas
+      |
+      v
+JSON response -> React state -> Updated interface
+```
+
+## Repository Structure
+
+```text
 Daily-Habit-Tracker/
-│
-├── backend/
-│   ├── config/
-│   │   └── db.js                  # MongoDB Atlas connection setup
-│   │
-│   ├── controllers/
-│   │   ├── authController.js      # Registration, login logic
-│   │   └── habitController.js     # Habit CRUD and tracking logic
-│   │
-│   ├── models/
-│   │   ├── User.js                # Mongoose schema for users
-│   │   └── Habit.js               # Mongoose schema for habits
-│   │
-│   ├── routes/
-│   │   ├── authRoutes.js          # Auth endpoint definitions
-│   │   └── habitRoutes.js         # Habit endpoint definitions
-│   │
-│   ├── middleware/
-│   │   ├── authMiddleware.js      # JWT token verification
-│   │   └── validateMiddleware.js  # Request body validation
-│   │
-│   └── server.js                  # Application entry point
-│
-├── frontend/
-│   ├── css/
-│   │   └── style.css              # Application styles
-│   │
-│   ├── js/
-│   │   └── app.js                 # Client-side JavaScript logic
-│   │
-│   ├── pages/
-│   │   ├── dashboard.html         # Habit dashboard
-│   │   ├── analytics.html         # Analytics view
-│   │   └── login.html             # Login / Register page
-│   │
-│   └── index.html                 # Application entry HTML
-│
-├── .env                           # Environment variables (not committed)
-├── .gitignore                     # Git ignore rules
-├── package.json                   # Project metadata and dependencies
-└── README.md                      # Project documentation
+|
+|-- client/
+|   |-- public/
+|   |   |-- flame-logo.png
+|   |   |-- index.html
+|   |   |-- manifest.json
+|   |   `-- robots.txt
+|   |-- src/
+|   |   |-- components/
+|   |   |   |-- common/ProtectedRoute.jsx
+|   |   |   `-- layout/
+|   |   |       |-- Navbar.jsx
+|   |   |       `-- Sidebar.jsx
+|   |   |-- pages/
+|   |   |   |-- Analytics.jsx
+|   |   |   |-- Auth.jsx
+|   |   |   |-- Dashboard.jsx
+|   |   |   |-- Habits.jsx
+|   |   |   |-- Profile.jsx
+|   |   |   `-- Settings.jsx
+|   |   |-- services/api.js
+|   |   |-- styles/terminal-theme.css
+|   |   |-- App.js
+|   |   |-- index.css
+|   |   `-- index.js
+|   |-- package.json
+|   |-- tailwind.config.js
+|   |-- postcss.config.js
+|   |-- vercel.json
+|   `-- build/
+|
+|-- server/
+|   |-- models/
+|   |   |-- Habit.js
+|   |   `-- User.js
+|   |-- routes/
+|   |   |-- auth.js
+|   |   `-- habits.js
+|   |-- server.js
+|   |-- package.json
+|   `-- vercel.json
+|
+|-- .gitignore
+`-- README.md
 ```
 
----
+## Data Model
+
+### User
+
+Stored in the MongoDB `users` collection:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `_id` | ObjectId | MongoDB-generated user ID used inside JWTs |
+| `username` | String | User's display name, 2 to 30 characters |
+| `email` | String | Email-based login ID |
+| `password` | String | bcrypt password hash; plain passwords are not stored |
+
+### Habit
+
+Stored in the MongoDB `habits` collection:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `_id` | ObjectId | MongoDB-generated habit ID |
+| `userId` | String | Authenticated owner's MongoDB ID |
+| `title` | String | Habit name |
+| `completedDates` | String array | Dates on which the habit was completed |
 
 ## Prerequisites
 
-Ensure the following are installed and configured on your system before proceeding:
+Install the following before starting:
 
-| Requirement | Version | Download |
-|---|---|---|
-| **Node.js** | v14 or higher | [nodejs.org](https://nodejs.org/) |
-| **npm** | Bundled with Node.js | — |
-| **Git** | Any recent version | [git-scm.com](https://git-scm.com/) |
-| **MongoDB Atlas Account** | Free tier or above | [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas) |
+- Node.js 18 or newer recommended.
+- npm.
+- Git.
+- A MongoDB Atlas account and database user.
+- A GitHub account for remote collaboration and deployment.
 
-> A MongoDB Atlas account is required. Create a free cluster, whitelist your IP address, and obtain your connection string from the Atlas dashboard before proceeding.
+## Local Development
 
----
-
-## Installation Guide
-
-Follow these steps to get the project running on your local machine.
-
-### Step 1 — Clone the Repository
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/Krissh360/Daily-Habit-Tracker.git
 cd Daily-Habit-Tracker
 ```
 
-### Step 2 — Install Dependencies
-
-Install dependencies for the backend:
+### 2. Install backend dependencies
 
 ```bash
-cd backend
+cd server
 npm install
 ```
 
-If the frontend also has a package file:
+### 3. Install frontend dependencies
 
 ```bash
-cd ../frontend
+cd ../client
 npm install
 ```
 
-### Step 3 — Configure Environment Variables
+### 4. Configure the server environment
 
-Create a `.env` file inside the `backend/` directory:
-
-```bash
-touch backend/.env
-```
-
-Add the following configuration to the file:
+Create `server/.env` locally. Never commit this file:
 
 ```env
-# Server Configuration
+MONGO_URI=mongodb+srv://<database-user>:<database-password>@<cluster>/<database>?retryWrites=true&w=majority
+JWT_SECRET=<long-random-secret>
 PORT=5000
-
-# MongoDB Atlas Connection String
-MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/habit-tracker?retryWrites=true&w=majority
-
-# JWT Secret Key — replace with a strong, random string
-JWT_SECRET=your_super_secret_key_here
+NODE_ENV=development
 ```
 
-Replace `<username>` and `<password>` with your MongoDB Atlas credentials. Your full connection string can be copied directly from the Atlas dashboard under **Connect > Connect your application**.
+The current server reads `MONGO_URI` and `JWT_SECRET`. `PORT` is optional and defaults to `5000`.
 
-> **Never commit your `.env` file to version control.** Ensure it is listed in `.gitignore`.
+### 5. Start the API
 
-### Step 4 — Start the Backend Server
+From `server/`:
 
 ```bash
-cd backend
 npm start
 ```
 
-The server will start at `http://localhost:5000`. On startup, Mongoose will establish a connection to your MongoDB Atlas cluster and log a confirmation to the console.
+The API should be available at `http://localhost:5000`.
 
-### Step 5 — Launch the Frontend
+### 6. Start the React client
 
-**If using static HTML files:**
-
-Open `frontend/index.html` directly in your browser, or serve it with a lightweight server:
+From `client/` in a second terminal:
 
 ```bash
-# Using the VS Code Live Server extension, or:
-npx serve frontend
+npm start
 ```
 
-**If using a dev server:**
+The client should be available at `http://localhost:3000`. The development proxy forwards `/api` requests to `http://localhost:5000`.
 
-```bash
-cd frontend
-npm run dev
+If port 3000 is already in use, stop the existing React process or accept the alternative port offered by Create React App.
+
+## Environment Variables
+
+### Server variables
+
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `MONGO_URI` | Yes | MongoDB Atlas connection string |
+| `JWT_SECRET` | Yes | Secret used to sign and verify JWTs |
+| `PORT` | No | Local server port; defaults to `5000` |
+| `NODE_ENV` | No | Runtime environment, such as `development` or `production` |
+| `CLIENT_URL` | Optional | Frontend origin if CORS is restricted during deployment |
+
+### Client variables
+
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `REACT_APP_API_URL` | Production | Public backend URL, without the trailing `/api` |
+
+Example production client variable:
+
+```env
+REACT_APP_API_URL=https://your-api-service.onrender.com
 ```
 
-The application will be accessible at `http://localhost:3000` (or the configured port).
+The client app appends `/api` automatically.
 
----
+## Available Scripts
 
-## Usage Guide
+### Client
 
-Once the application is running, follow these steps to get started:
+Run from `client/`:
 
-1. **Register an Account** — Navigate to the registration page and create a new user account with your name, email, and password.
+| Command | Purpose |
+| --- | --- |
+| `npm start` | Start the React development server |
+| `npm run build` | Create the production build in `client/build` |
+| `npm test` | Run the Create React App test runner |
 
-2. **Log In** — Sign in using your registered credentials. A JWT token will be issued to authenticate your session.
+### Server
 
-3. **Create Habits** — From the dashboard, click **Add Habit** to create a new habit. Provide a name and any relevant details.
+Run from `server/`:
 
-4. **Track Daily Completions** — Each day, visit the dashboard and mark your habits as completed. Your progress is recorded and stored against the current date.
-
-5. **View Analytics** — Navigate to the **Analytics** section to view your daily and weekly completion rates, progress indicators, and historical trends.
-
-6. **Manage Habits** — Edit or delete existing habits from the dashboard at any time.
-
----
+| Command | Purpose |
+| --- | --- |
+| `npm start` | Start the Express server |
 
 ## API Reference
 
-All API endpoints are prefixed with `/api`. Requests to protected routes must include a valid JWT in the `Authorization` header:
+The API is mounted under `/api`. Protected endpoints require:
 
+```http
+Authorization: Bearer <jwt-token>
 ```
-Authorization: Bearer <your_token>
-```
 
-### Authentication
+### Authentication and Profile
 
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| `POST` | `/api/auth/register` | Register a new user | No |
-| `POST` | `/api/auth/login` | Log in and receive a JWT | No |
+| Method | Endpoint | Authentication | Description |
+| --- | --- | --- |
+| `POST` | `/api/auth/register` | No | Create a user account |
+| `POST` | `/api/auth/login` | No | Verify credentials and issue a JWT |
+| `PATCH` | `/api/auth/profile` | Yes | Update the authenticated user's username |
 
-**Register — Request Body:**
+Register request:
+
 ```json
 {
-  "name": "Krissh Chhabra",
+  "username": "krissh",
   "email": "krissh@example.com",
-  "password": "securepassword"
+  "password": "use-a-strong-password"
 }
 ```
 
-**Login — Request Body:**
+Login request:
+
 ```json
 {
   "email": "krissh@example.com",
-  "password": "securepassword"
+  "password": "use-a-strong-password"
 }
 ```
 
----
+Profile update request:
 
-### Habits
-
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| `GET` | `/api/habits` | Fetch all habits for the logged-in user | Yes |
-| `POST` | `/api/habits` | Create a new habit | Yes |
-| `PUT` | `/api/habits/:id` | Update an existing habit by ID | Yes |
-| `DELETE` | `/api/habits/:id` | Delete a habit by ID | Yes |
-
-**Create Habit — Request Body:**
 ```json
 {
-  "name": "Morning Run",
-  "description": "30-minute jog every morning"
+  "username": "new-display-name"
 }
 ```
 
-**Update Habit — Request Body:**
+### Habits and Analytics
+
+| Method | Endpoint | Authentication | Description |
+| --- | --- | --- | --- |
+| `GET` | `/api/habits` | Yes | Return the authenticated user's habits and calculated streak data |
+| `POST` | `/api/habits` | Yes | Create a habit |
+| `PUT` | `/api/habits/complete/:id` | Yes | Mark a habit complete for today |
+| `DELETE` | `/api/habits/:id` | Yes | Delete one of the authenticated user's habits |
+| `GET` | `/api/habits/analytics` | Yes | Return totals, completions, average streak, and top habit |
+
+Create habit request:
+
 ```json
 {
-  "completed": true
+  "title": "Read for 20 minutes"
 }
 ```
 
----
+Analytics response shape:
+
+```json
+{
+  "totalHabits": 3,
+  "totalCompletions": 12,
+  "averageStreak": "4.00",
+  "mostConsistentHabit": "Read for 20 minutes"
+}
+```
+
+## Deployment
+
+The recommended production layout is:
+
+```mermaid
+flowchart LR
+    GitHub[GitHub repository] --> Vercel[Vercel client deployment]
+    GitHub --> Render[Render API deployment]
+    Vercel -->|REACT_APP_API_URL| Render
+    Render -->|MONGO_URI| Atlas[(MongoDB Atlas)]
+```
+
+### Deploy the API to Render
+
+1. Create a Render Web Service from the GitHub repository.
+2. Set the root directory to `server`.
+3. Set the build command to `npm install`.
+4. Set the start command to `npm start`.
+5. Add these Render environment variables:
+
+```env
+MONGO_URI=<production-mongodb-connection-string>
+JWT_SECRET=<new-long-random-production-secret>
+NODE_ENV=production
+```
+
+6. Deploy and verify the service root returns `API is running`.
+7. Copy the Render service URL for the Vercel configuration.
+
+### Deploy the client to Vercel
+
+1. Import the same GitHub repository into Vercel.
+2. Set the root directory to `client`.
+3. Select Create React App, or use these settings:
+   - Build command: `npm run build`
+   - Output directory: `build`
+4. Add this Vercel environment variable:
+
+```env
+REACT_APP_API_URL=https://your-api-service.onrender.com
+```
+
+5. Deploy the client.
+6. Test registration, login, habit creation, completion, username editing, analytics, refresh, and theme switching from the deployed URL.
+
+The client uses `client/vercel.json` to support React Router fallback routes.
+
+## Security Notes
+
+- Never commit `.env` files or paste secrets into source code, issues, or documentation.
+- Use a unique production `JWT_SECRET`; do not use example values.
+- Rotate database credentials if a connection string has ever been exposed.
+- Use HTTPS for all deployed client-to-API traffic.
+- Configure MongoDB Atlas network access deliberately for the deployment environment.
+- Keep passwords server-side and hashed with bcrypt.
+- Treat browser `localStorage` as client-accessible data; never store a plaintext password there.
+- Restrict production CORS to the deployed Vercel origin when the deployment environment is stable.
+
+## Validation and Troubleshooting
+
+### Build validation
+
+```bash
+cd client
+npm run build
+```
+
+### API health check
+
+Open the deployed API root or run:
+
+```bash
+curl http://localhost:5000/
+```
+
+Expected response:
+
+```text
+API is running
+```
+
+### Common issues
+
+| Symptom | Likely cause | Check |
+| --- | --- | --- |
+| Client cannot reach API | Missing or incorrect `REACT_APP_API_URL` | Confirm the Vercel variable and redeploy |
+| MongoDB connection fails | Invalid URI or Atlas network rule | Check `MONGO_URI` and Atlas access settings |
+| Login fails after secret rotation | Old JWT session | Log in again and clear stale browser storage if needed |
+| React route returns 404 after refresh | Missing Vercel fallback | Confirm `client/vercel.json` is deployed |
+| Port 3000 is busy | Existing React process | Stop the existing process or use the alternate port |
 
 ## Roadmap
 
-The following enhancements are planned for future releases:
+Potential future improvements include:
 
-- [ ] **Advanced Analytics** — Rich interactive charts using Chart.js or D3.js for streak tracking and visual heatmaps
-- [ ] **Mobile Responsive Design** — Fully optimized layout for smartphones and tablets
-- [ ] **Push Notifications & Reminders** — Daily habit reminders via browser notifications
-- [ ] **Multi-device Sync** — Seamless syncing of habit data across multiple devices
-- [ ] **AI-based Habit Recommendations** — Smart suggestions powered by completion trends and behavioral patterns
-- [ ] **Dark Mode** — Toggleable dark/light theme for better usability
-
----
+- Habit editing and richer habit metadata.
+- Password reset and account recovery.
+- Expiring JWTs with refresh-token support.
+- Browser reminders and notification preferences.
+- Expanded weekly and monthly trend analytics.
+- Automated API and component test coverage.
+- Improved server-side validation and structured error handling.
+- Custom domains and stricter production network controls.
 
 ## Contributing
 
-Contributions are welcome and encouraged. To contribute to this project:
+1. Create a branch from `main`:
 
-1. **Fork** this repository
-2. **Create** a new feature branch
    ```bash
-   git checkout -b feature/your-feature-name
+   git checkout -b feature/short-description
    ```
-3. **Commit** your changes with a clear, descriptive message
-   ```bash
-   git commit -m "feat: add weekly streak tracking"
-   ```
-4. **Push** the branch to your fork
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-5. **Open a Pull Request** against the `main` branch with a detailed description of your changes
 
-Please follow consistent code style and ensure your changes do not break existing functionality.
+2. Make a focused change that preserves existing behavior.
+3. Run the relevant validation commands, especially `npm run build` for frontend changes.
+4. Use a descriptive commit message, for example:
 
----
+   ```bash
+   git commit -m "Add weekly habit completion summary"
+   ```
+
+5. Push the branch and open a pull request against `main`.
+6. Include a concise summary, validation details, and any deployment considerations.
 
 ## License
 
-This project is intended for **educational and demonstration purposes**. All rights are reserved by the author unless otherwise stated.
-
----
+This project is intended for educational and demonstration purposes. All rights are reserved by the author unless otherwise stated.
 
 ## Author
 
 **Krissh Chhabra**
-(https://github.com/Krissh360)
 
-*Built with focus, consistency, and a genuine interest in full-stack development.*
+- GitHub: [Krissh360](https://github.com/Krissh360)
+
+Built with focus, consistency, and a genuine interest in full-stack development.
