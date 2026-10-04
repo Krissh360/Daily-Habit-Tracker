@@ -39,6 +39,7 @@ export default function Sidebar() {
       document.documentElement.classList.remove("dark");
       localStorage.setItem("theme", "light");
     }
+    window.dispatchEvent(new Event("themeUpdated"));
   };
 
   const menuItems = [

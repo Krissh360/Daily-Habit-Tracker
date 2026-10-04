@@ -30,6 +30,18 @@ ChartJS.register(
 export default function Analytics() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isDark, setIsDark] = useState(() =>
+    document.documentElement.classList.contains("dark")
+  );
+
+  useEffect(() => {
+    const handleThemeUpdated = () => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    };
+
+    window.addEventListener("themeUpdated", handleThemeUpdated);
+    return () => window.removeEventListener("themeUpdated", handleThemeUpdated);
+  }, []);
 
   useEffect(() => {
     async function fetchAnalytics() {
@@ -80,6 +92,7 @@ export default function Analytics() {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    color: isDark ? "#d4d4d8" : "#334155",
     plugins: {
       legend: {
         display: false,
@@ -93,12 +106,18 @@ export default function Analytics() {
     scales: {
       y: {
         grid: {
-          color: "rgba(148, 163, 184, 0.15)",
+          color: isDark ? "rgba(161, 161, 170, 0.2)" : "rgba(148, 163, 184, 0.15)",
+        },
+        ticks: {
+          color: isDark ? "#a1a1aa" : "#64748b",
         },
       },
       x: {
         grid: {
           display: false,
+        },
+        ticks: {
+          color: isDark ? "#a1a1aa" : "#64748b",
         },
       },
     },
